@@ -5,6 +5,7 @@ import { ErrorWithStatus, LOGGER_WINSTON_TOKEN, LoggerWinston } from "../../../u
 import { status } from "@grpc/grpc-js";
 import { KAFKA_PRODUCER_TOKEN } from "./producer";
 import { injected, token } from "brandi";
+import { BINARY_CONVERTOR_TOKEN, BinaryConvertor } from "../../../utils/binary_converter";
 
 export class PaymentTransactionCompleted {
     constructor(
@@ -20,6 +21,7 @@ export interface PaymentTransactionCompletedProducer {
 export class PaymentTransactionCompletedProducerImpl implements PaymentTransactionCompletedProducer {
     constructor(
         private readonly producer: Producer,
+        private readonly binaryConvertor: BinaryConvertor,
         private readonly logger: LoggerWinston
     ) { }
 
@@ -28,7 +30,7 @@ export class PaymentTransactionCompletedProducerImpl implements PaymentTransacti
             await this.producer.connect()
             await this.producer.send({
                 topic: TopicOrderPaymentCreated,
-                messages: [{ value: "" }]
+                messages: [{ value: this.binaryConvertor.toBuffer(message) }]
             }).then(() => this.logger.info("send message payment transaction success"))
         } catch (error) {
             this.logger.error(
@@ -38,6 +40,6 @@ export class PaymentTransactionCompletedProducerImpl implements PaymentTransacti
     }
 }
 
-injected(PaymentTransactionCompletedProducerImpl, KAFKA_PRODUCER_TOKEN, LOGGER_WINSTON_TOKEN);
+injected(PaymentTransactionCompletedProducerImpl, KAFKA_PRODUCER_TOKEN, BINARY_CONVERTOR_TOKEN, LOGGER_WINSTON_TOKEN);
 
 export const PAYMENT_TRANSACTION_COMPLETED_PRODUCER_TOKEN = token<PaymentTransactionCompletedProducerImpl>("PaymentTransactionCompletedProducerImpl");
