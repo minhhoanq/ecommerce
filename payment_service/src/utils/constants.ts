@@ -1,0 +1,1 @@
+export const TopicOrderPaymentCreated = "payment_service_payment_transaction_completed";
