@@ -14,7 +14,6 @@ export class PaymentServiceHandlerFactory {
         const handler: PaymentServiceHandlers = {
             CreatePayment: async (call, callback) => {
                 const req = call.request;
-                console.log("req: ", req);
                 const response: CreatePaymentResponse = await this.paymentManagementOperators.createPayment(req)
 
                 callback(null, response)
