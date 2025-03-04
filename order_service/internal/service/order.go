@@ -6,6 +6,7 @@ import (
 
 	"github.com/minhhoanq/lifeat/common/logger"
 	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/database"
+	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/kafka/producer"
 	"github.com/minhhoanq/lifeat/order_service/internal/generated/catalog_service"
 	pb "github.com/minhhoanq/lifeat/order_service/internal/generated/order_service"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -19,17 +20,20 @@ type orderService struct {
 	l                    logger.Interface
 	orderDataAccessor    database.OrderDataAccessor
 	catalogServiceClient catalog_service.CatalogServiceClient
+	kafkaProducer        producer.Producer
 }
 
 // catalogAccessor database.CatalogDataAccessor
 func NewOrderService(l logger.Interface,
 	orderDataAccessor database.OrderDataAccessor,
 	catalogServiceClient catalog_service.CatalogServiceClient,
+	kafkaProducer producer.Producer,
 ) OrderService {
 	return &orderService{
 		l:                    l,
 		orderDataAccessor:    orderDataAccessor,
 		catalogServiceClient: catalogServiceClient,
+		kafkaProducer:        kafkaProducer,
 	}
 }
 

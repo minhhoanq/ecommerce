@@ -78,9 +78,9 @@ func RunRestServer(cfg config.Config) {
 	}
 
 	mailer := email.NewGmailSender(cfg.EmailSenderName, cfg.EmailSenderAddress, cfg.EmailSenderPassword)
-	userSigunHandler := consumers.NewUserSignupHandler(mailer, q, l)
+	userSigupHandler := consumers.NewUserSignupHandler(mailer, q, l)
 
-	userServiceKafkaConsumer := consumers.NewUserServiceKafkaConsumer(kafkaConsumer, userSigunHandler)
+	userServiceKafkaConsumer := consumers.NewUserServiceKafkaConsumer(kafkaConsumer, userSigupHandler)
 
 	go func(ctx context.Context) {
 		err = userServiceKafkaConsumer.Start(ctx)

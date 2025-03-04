@@ -94,7 +94,7 @@ func (h consumerHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim
 			if !ok {
 				session.Commit()
 			}
-			fmt.Printf("Order Service - Processing order: %s\n", string(message.Value))
+			fmt.Printf("Catalog Service - Processing order: %s\n", string(message.Value))
 			if err := h.handlerFunc(session.Context(), message.Topic, message.Value); err != nil {
 				return err
 			}
