@@ -17,7 +17,7 @@ func InitialServer(cfg config.Config, l logger.Interface) (grpc.Server, error) {
 	}
 
 	redisInit := redis.NewRedis(cfg, l)
-	defer redisInit.Close()
+	// defer redisInit.Close()
 
 	redisClient := redisInit.Connect()
 

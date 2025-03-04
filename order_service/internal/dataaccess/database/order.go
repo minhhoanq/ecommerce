@@ -96,10 +96,14 @@ func (o *orderDataAccessor) createOrderItems(ctx context.Context, order_id uuid.
 			return nil, fmt.Errorf("failed to generate lock value", err)
 		}
 
+		o.l.Info("lock info", zap.String("lock_key", lockKey), zap.String("lock_value", lockValue), zap.String("time_out", lockTimeout.String()))
+
+		o.l.Info("start acquirelock")
 		if ok := o.redisInit.AcquireLock(o.redisClient, lockKey, lockValue, lockTimeout); !ok {
 			o.l.Error("failed to acquire lock")
 			return nil, fmt.Errorf("failed to acquire lock")
 		} else {
+			o.l.Info("acquired lock success")
 			// process order
 			skuID, err := uuid.Parse(item.SkuID)
 			if err != nil {
@@ -116,14 +120,19 @@ func (o *orderDataAccessor) createOrderItems(ctx context.Context, order_id uuid.
 				Quantity: item.Quantity,
 			})
 
+			// send event payment service => send event verify order
+
+			o.l.Info("start release lock")
 			// get lock value
 			val, err := o.redisClient.Get(ctx, lockKey).Result()
 			if err != nil {
 				o.l.Error("failed to get value lock")
 				return nil, fmt.Errorf("failed to get value lock")
 			}
+
 			// if val == lockKey => release lock
-			if val == lockKey {
+			o.l.Info("macth val && lockKey", zap.String("val", val), zap.String("lock_val", lockValue))
+			if val == lockValue {
 				if err := o.redisInit.ReleaseLock(o.redisClient, lockKey); err != nil {
 					o.l.Error("failed to delete lock ", zap.Error(err))
 					return nil, fmt.Errorf("failed to delete lock ", err)
