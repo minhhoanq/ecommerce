@@ -15,7 +15,10 @@ export class PaymentCreatedMessageHandlerImpl implements PaymentCreatedMessageHa
 
     public async paymentCreated(message: CreatePaymentRequest): Promise<void> {
         this.logger.info(`payment_service_payment_created message received: ${message}`)
-
+        this.logger.info(`starting to create payment: ${message.amount}`)
+        this.logger.info(`starting to create payment: ${message.orderId}`)
+        this.logger.info(`starting to create payment: ${message.onlPaymentIntentId}`)
+        this.logger.info(`starting to create payment: ${message.paymentMethod}`)
         if (message.orderId === "") {
             this.logger.error(`payment_service_payment_created order_id is required: ${message.orderId}`)
             return;

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/minhhoanq/lifeat/common/logger"
@@ -71,9 +72,30 @@ func (o *orderService) CreateOrder(ctx context.Context, arg *pb.CreateOrderReque
 	}
 
 	result, err := o.orderDataAccessor.CreateOrder(ctx, order)
+
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println("rs ", result)
+
+	message := &producer.OrderCreated{
+		ID:     result.Order.ID,
+		UserID: result.Order.UserID,
+		Items:  make([]database.OrderItem, 0),
+	}
+
+	for _, item := range result.OrderItems {
+		message.Items = append(message.Items, item)
+	}
+
+	jsonMessage, err := json.Marshal(&message)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal json message")
+	}
+
+	// send event order created to payment service
+	o.kafkaProducer.Produce(ctx, producer.TOPIC_NAME_ORDER_SERVICE_ORDER_CREATED, jsonMessage)
 
 	response := &pb.CreateOrderResponse{
 		Order: &pb.Order{

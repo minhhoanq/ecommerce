@@ -18,7 +18,6 @@ import (
 
 func InitialServer(cfg config.Config, l logger.Interface) (grpc.Server, error) {
 	db, err := database.New(cfg, l)
-	defer db.Close()
 	if err != nil {
 		return nil, err
 	}

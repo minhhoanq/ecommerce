@@ -7,6 +7,7 @@
         "dev": "nodemon src/main.ts",
         "generate": "./node_modules/.bin/proto-loader-gen-types --longs=Number --enums=Number --oneofs --grpcLib=@grpc/grpc-js --outDir=src/proto/gen src/proto/*.proto",
         "serve-grpc": "ts-node src/main.ts --start_grpc_server",
+        "serve-kafka": "ts-node src/main.ts --start_kafka_consumer",
         "build": "tsc",
         "test": "jest"
     },

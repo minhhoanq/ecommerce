@@ -34,7 +34,10 @@ export class PaymentDataAccessorImpl implements PaymentDataAccessorImpl {
 
     public async createPayment(arg: CreatePaymentParams): Promise<Payment | null> {
         try {
-            this.logger.info(`starting to create payment: ${arg}`)
+            this.logger.info(`starting to create payment: ${arg.amount}`)
+            this.logger.info(`starting to create payment: ${arg.order_id}`)
+            this.logger.info(`starting to create payment: ${arg.onl_payment_intent_id}`)
+            this.logger.info(`starting to create payment: ${arg.payment_method}`)
 
             const rows = await this.knex
                 .insert({

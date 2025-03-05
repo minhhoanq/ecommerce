@@ -15,8 +15,9 @@ const (
 )
 
 type OrderCreated struct {
-	ID    uuid.UUID
-	Items []database.OrderItem
+	ID     uuid.UUID
+	UserID uuid.UUID
+	Items  []database.OrderItem
 }
 
 type OrderCreatedProducer interface {

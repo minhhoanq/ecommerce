@@ -1,10 +1,10 @@
 import { injected, token } from "brandi";
 import { MESSAGE_CONSUMER_TOKEN, MessageConsumer } from "../dataaccess/kafka/consumer";
-import { CreatePaymentRequest } from "../proto/gen/payment_service/CreatePaymentRequest";
 import { BINARY_CONVERTOR_TOKEN, BinaryConvertor, LOGGER_WINSTON_TOKEN, LoggerWinston } from "../utils";
 import { PAYMENT_CREATED_MESSAGE_HANDLER_IMPL_TOKEN, PaymentCreatedMessageHandler } from "./payment_created";
+import { CreatePaymentRequest } from "../proto/gen/payment_service/CreatePaymentRequest";
 
-const TOPIC_NAME_ORDER_SERVICE_ORDER_CREATED = "order_serive_order_created"
+const TOPIC_NAME_ORDER_SERVICE_ORDER_CREATED = "order_service_order_created"
 
 export class PaymentKafkaConsumer {
     constructor(
@@ -35,7 +35,14 @@ export class PaymentKafkaConsumer {
 
         const paymentCreatedMessage = this.binaryConvertor.fromBuffer(message);
         // TODO
-        await this.paymentCreatedMessageHandler.paymentCreated(paymentCreatedMessage);
+        this.logger.info(`payment message: ${paymentCreatedMessage.ID}`)
+        const paymentCreatedMessageParams: CreatePaymentRequest = {
+            orderId: paymentCreatedMessage.ID,
+            onlPaymentIntentId: paymentCreatedMessage.ID,
+            amount: 100000,
+            paymentMethod: "cash"
+        }
+        await this.paymentCreatedMessageHandler.paymentCreated(paymentCreatedMessageParams);
     }
 }
 

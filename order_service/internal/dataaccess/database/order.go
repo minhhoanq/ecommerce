@@ -47,8 +47,16 @@ func (o *orderDataAccessor) CreateOrder(ctx context.Context, arg *CreateOrderReq
 	var response *CreateOrderResponse
 
 	err := o.database.Transaction(func(tx *gorm.DB) error {
+		if tx.Error != nil {
+			o.l.Error("failed to start transaction", zap.Error(tx.Error))
+			return tx.Error
+		}
+
 		userID, err := uuid.Parse(arg.UserID)
+		o.l.Info("create order starting 1")
+
 		if err != nil {
+			o.l.Error("failed to parse user ID", zap.Error(err))
 			return err
 		}
 
@@ -57,11 +65,19 @@ func (o *orderDataAccessor) CreateOrder(ctx context.Context, arg *CreateOrderReq
 			Address: arg.Address,
 			Status:  arg.Status,
 		}
+		o.l.Info("create order starting 2")
+
 		if err := tx.WithContext(ctx).Create(&order).Error; err != nil {
+			o.l.Error("failed to create order", zap.Error(err))
 			return err
 		}
+		o.l.Info("create order starting 3")
 
 		orderItems, err := o.createOrderItems(ctx, order.ID, arg.OrderItems, tx)
+		if err != nil {
+			o.l.Error("failed to create order items", zap.Error(err))
+			return err
+		}
 
 		response = &CreateOrderResponse{
 			Order: Order{
@@ -78,15 +94,20 @@ func (o *orderDataAccessor) CreateOrder(ctx context.Context, arg *CreateOrderReq
 
 		return nil
 	})
+
+	o.l.Info("transaction completed", zap.Error(err))
+
 	if err != nil {
+		o.l.Error("transaction failed", zap.Error(err))
 		return nil, err
 	}
 
-	return response, err
+	return response, nil
 }
 
 func (o *orderDataAccessor) createOrderItems(ctx context.Context, order_id uuid.UUID, arg []CreateOrderItemRequest, tx *gorm.DB) ([]OrderItem, error) {
 	orderItems := make([]OrderItem, 0, len(arg))
+	fmt.Println("create order item starting")
 
 	for _, item := range arg {
 		lockKey := fmt.Sprintf("lock_order_%w", item.SkuID)
