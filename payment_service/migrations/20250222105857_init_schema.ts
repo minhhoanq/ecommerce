@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
             table.uuid("order_id").notNullable();
             table.string("onl_payment_intent_id", 256).nullable().unique();
             table.integer("amount").notNullable();
-            table.enu('status', ['pending', 'success', 'failed']).defaultTo('pending');
+            table.enu('status', ['pending', 'success', 'cancel']).defaultTo('pending');
             table.enu('payment_method', ['cash', 'credit card']).notNullable();
 
             table.timestamp('created_at').defaultTo(knex.fn.now());

@@ -3,6 +3,7 @@ import { Config, CONFIG_TOKEN } from "./config";
 import { DATABASE_CONFIG_TOKEN } from "./database";
 import { GRPC_SERVER_CONFIG_TOKEN } from "./grpc_server";
 import { KAFKA_CONFIG_TOKEN } from "./kafka";
+import { STRIPE_CONFIG_TOKEN } from "./stripe";
 
 export * from "./config"
 export * from "./database"
@@ -13,4 +14,5 @@ export function bindToContainer(container: Container): void {
     container.bind(DATABASE_CONFIG_TOKEN).toInstance(() => Config.fromEnv().databaseConfig).inSingletonScope();
     container.bind(GRPC_SERVER_CONFIG_TOKEN).toInstance(() => Config.fromEnv().grpcServerConfig).inSingletonScope();
     container.bind(KAFKA_CONFIG_TOKEN).toInstance(() => Config.fromEnv().kafkaConfig).inSingletonScope();
+    container.bind(STRIPE_CONFIG_TOKEN).toInstance(() => Config.fromEnv().stripeConfig).inSingletonScope();
 }

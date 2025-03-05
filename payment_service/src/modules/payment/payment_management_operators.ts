@@ -1,11 +1,11 @@
 import { status } from "@grpc/grpc-js";
-import { Payment } from "../dataaccess/db/models";
-import { CreatePaymentParams, PAYMENT_DATA_ACCESSOR_TOKEN, PaymentDataAccessor } from "../dataaccess/db/payment";
-import { CreatePaymentRequest } from "../proto/gen/payment_service/CreatePaymentRequest";
-import { CreatePaymentResponse } from "../proto/gen/payment_service/CreatePaymentResponse";
-import { ErrorWithStatus } from "../utils";
+import { Payment } from "../../dataaccess/db/models";
+import { CreatePaymentParams, PAYMENT_DATA_ACCESSOR_TOKEN, PaymentDataAccessor } from "../../dataaccess/db/payment";
+import { CreatePaymentRequest } from "../../proto/gen/payment_service/CreatePaymentRequest";
+import { CreatePaymentResponse } from "../../proto/gen/payment_service/CreatePaymentResponse";
+import { ErrorWithStatus } from "../../utils";
 import { injected, token } from "brandi";
-import { Payment as paymentRes } from "../proto/gen/payment_service/Payment";
+import { Payment as paymentRes } from "../../proto/gen/payment_service/Payment";
 
 export interface PaymentManagementOperator {
     createPayment(arg: CreatePaymentRequest): Promise<CreatePaymentResponse>;

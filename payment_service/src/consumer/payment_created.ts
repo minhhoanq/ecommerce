@@ -1,5 +1,5 @@
 import { injected, token } from "brandi";
-import { PAYMENT_MANAGEMENT_OPERATOR_IMPL_TOKEN, PaymentManagementOperator } from "../modules/payment_management_operators";
+import { PAYMENT_MANAGEMENT_OPERATOR_IMPL_TOKEN, PaymentManagementOperator } from "../modules/payment/payment_management_operators";
 import { CreatePaymentRequest } from "../proto/gen/payment_service/CreatePaymentRequest";
 import { LOGGER_WINSTON_TOKEN, LoggerWinston } from "../utils";
 

@@ -10,7 +10,7 @@ export class Payment {
 }
 
 export enum PaymentTransactionStatus {
-    PENDING = 0,
-    SUCCESS = 1,
-    CANCEL = 2
+    PENDING = "PENDING",
+    SUCCESS = "SUCCESS",
+    CANCEL = "CANCLE"
 }

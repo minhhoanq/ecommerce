@@ -1,9 +1,9 @@
-import { Payment as PaymentProto } from "../proto/gen/payment_service/Payment";
+import { Payment as PaymentProto } from "../../proto/gen/payment_service/Payment";
 
 export enum PaymentStatus {
     PENDING = "PENDING",
     SUCCESS = "SUCCESS",
-    FAILED = "FAILED",
+    CANCEL = "CANCEL",
 }
 
 export enum PaymentMethod {
