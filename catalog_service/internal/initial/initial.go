@@ -3,13 +3,13 @@ package initial
 import (
 	"context"
 
-	"github.com/minhhoanq/lifeat/catalog_service/configs"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/dataaccess/database"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/dataaccess/redis"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/handler/grpc"
-	userservice "github.com/minhhoanq/lifeat/catalog_service/internal/handler/grpc/clients/user_service"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/service"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/configs"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/redis"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/handler/grpc"
+	userservice "github.com/minhhoanq/ecommerce/catalog_service/internal/handler/grpc/clients/user_service"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/service"
+	"github.com/minhhoanq/ecommerce/common/logger"
 )
 
 func InitialServer(cfg configs.Config, l logger.Interface) (grpc.Server, error) {

@@ -3,16 +3,16 @@ package initial
 import (
 	"context"
 
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/config"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/database"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/kafka/consumer"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/kafka/producer"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/redis"
-	"github.com/minhhoanq/lifeat/order_service/internal/handler/grpc"
-	catalogservice "github.com/minhhoanq/lifeat/order_service/internal/handler/grpc/clients/catalog_service"
-	"github.com/minhhoanq/lifeat/order_service/internal/handler/grpc/consumers"
-	"github.com/minhhoanq/lifeat/order_service/internal/service"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/config"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/kafka/consumer"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/kafka/producer"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/redis"
+	"github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc"
+	catalogservice "github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc/clients/catalog_service"
+	"github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc/consumers"
+	"github.com/minhhoanq/ecommerce/order_service/internal/service"
 	"go.uber.org/zap"
 )
 

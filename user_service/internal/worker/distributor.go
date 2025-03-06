@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/hibiken/asynq"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/common/logger"
 )
 
 type TaskDistributor interface {

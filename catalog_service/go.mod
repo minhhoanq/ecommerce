@@ -1,4 +1,4 @@
-module github.com/minhhoanq/lifeat/catalog_service
+module github.com/minhhoanq/ecommerce/catalog_service
 
 go 1.23.6
 

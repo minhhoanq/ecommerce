@@ -1,9 +1,9 @@
 package userservice
 
 import (
-	"github.com/minhhoanq/lifeat/catalog_service/configs"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/generated/user_service"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/configs"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/generated/user_service"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

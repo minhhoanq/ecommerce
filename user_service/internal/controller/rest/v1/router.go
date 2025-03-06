@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/internal/token"
-	usecase "github.com/minhhoanq/lifeat/user_service/internal/usecase/rest"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/internal/token"
+	usecase "github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

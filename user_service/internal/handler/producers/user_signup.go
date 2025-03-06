@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 
 	"github.com/google/uuid"
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/pkg/constants"
-	"github.com/minhhoanq/lifeat/user_service/pkg/kafka"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/constants"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/kafka"
 	"go.uber.org/zap"
 )
 

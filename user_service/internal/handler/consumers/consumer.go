@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/minhhoanq/lifeat/user_service/internal/handler/producers"
-	"github.com/minhhoanq/lifeat/user_service/pkg/constants"
-	"github.com/minhhoanq/lifeat/user_service/pkg/kafka"
+	"github.com/minhhoanq/ecommerce/user_service/internal/handler/producers"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/constants"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/kafka"
 )
 
 type UserServiceKafkaConsumer interface {

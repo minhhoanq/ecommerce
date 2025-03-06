@@ -1,9 +1,9 @@
 package catalogservice
 
 import (
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/config"
-	"github.com/minhhoanq/lifeat/order_service/internal/generated/catalog_service"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/config"
+	"github.com/minhhoanq/ecommerce/order_service/internal/generated/catalog_service"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

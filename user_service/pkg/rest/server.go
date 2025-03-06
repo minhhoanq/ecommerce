@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/pkg/constants"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/constants"
 	"golang.org/x/sync/errgroup"
 
 	"go.uber.org/zap"

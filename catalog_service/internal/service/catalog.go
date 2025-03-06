@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/dataaccess/database"
-	pb "github.com/minhhoanq/lifeat/catalog_service/internal/generated/catalog_service"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/generated/user_service"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/database"
+	pb "github.com/minhhoanq/ecommerce/catalog_service/internal/generated/catalog_service"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/generated/user_service"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/minhhoanq/lifeat/catalog_service/configs"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/configs"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -8,12 +8,12 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/lib/pq"
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/config"
-	"github.com/minhhoanq/lifeat/user_service/internal/entity"
-	"github.com/minhhoanq/lifeat/user_service/internal/token"
-	"github.com/minhhoanq/lifeat/user_service/internal/usecase/rest/repo"
-	"github.com/minhhoanq/lifeat/user_service/internal/worker"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/config"
+	"github.com/minhhoanq/ecommerce/user_service/internal/entity"
+	"github.com/minhhoanq/ecommerce/user_service/internal/token"
+	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
+	"github.com/minhhoanq/ecommerce/user_service/internal/worker"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 

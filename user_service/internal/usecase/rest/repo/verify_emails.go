@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/minhhoanq/lifeat/user_service/internal/entity"
+	"github.com/minhhoanq/ecommerce/user_service/internal/entity"
 )
 
 type CreateVerifyEmailParams struct {

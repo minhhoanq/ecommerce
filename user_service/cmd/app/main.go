@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/config"
-	rest "github.com/minhhoanq/lifeat/user_service/internal/app/http"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/config"
+	rest "github.com/minhhoanq/ecommerce/user_service/internal/app/http"
 )
 
 func main() {

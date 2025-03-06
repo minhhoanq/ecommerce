@@ -3,7 +3,7 @@ package email
 import (
 	"testing"
 
-	"github.com/minhhoanq/lifeat/user_service/config"
+	"github.com/minhhoanq/ecommerce/user_service/config"
 	"github.com/stretchr/testify/require"
 )
 

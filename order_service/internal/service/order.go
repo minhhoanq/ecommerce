@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/database"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/kafka/producer"
-	"github.com/minhhoanq/lifeat/order_service/internal/generated/catalog_service"
-	pb "github.com/minhhoanq/lifeat/order_service/internal/generated/order_service"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/kafka/producer"
+	"github.com/minhhoanq/ecommerce/order_service/internal/generated/catalog_service"
+	pb "github.com/minhhoanq/ecommerce/order_service/internal/generated/order_service"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

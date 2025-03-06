@@ -3,12 +3,12 @@ package grpc
 import (
 	"context"
 
-	"github.com/minhhoanq/lifeat/user_service/config"
-	pbuser "github.com/minhhoanq/lifeat/user_service/internal/controller/grpc/v1/user_service"
-	"github.com/minhhoanq/lifeat/user_service/internal/token"
-	"github.com/minhhoanq/lifeat/user_service/internal/usecase/rest/repo"
-	"github.com/minhhoanq/lifeat/user_service/internal/worker"
-	"github.com/minhhoanq/lifeat/user_service/pkg/kafka"
+	"github.com/minhhoanq/ecommerce/user_service/config"
+	pbuser "github.com/minhhoanq/ecommerce/user_service/internal/controller/grpc/v1/user_service"
+	"github.com/minhhoanq/ecommerce/user_service/internal/token"
+	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
+	"github.com/minhhoanq/ecommerce/user_service/internal/worker"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/kafka"
 )
 
 type GrpcServer struct {

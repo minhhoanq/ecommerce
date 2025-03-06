@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
-	"github.com/minhhoanq/lifeat/user_service/internal/usecase/rest/repo"
-	"github.com/minhhoanq/lifeat/user_service/internal/util"
+	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
+	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 	"go.uber.org/zap"
 )
 

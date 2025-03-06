@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/minhhoanq/lifeat/catalog_service/internal/generated/catalog_service"
-	"github.com/minhhoanq/lifeat/catalog_service/internal/service"
-	"github.com/minhhoanq/lifeat/common/logger"
+	pb "github.com/minhhoanq/ecommerce/catalog_service/internal/generated/catalog_service"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/service"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/redis/go-redis/v9"
 )
 

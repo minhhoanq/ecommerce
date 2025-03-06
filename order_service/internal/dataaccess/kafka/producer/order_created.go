@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 
 	"github.com/google/uuid"
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/database"
 	"go.uber.org/zap"
 )
 

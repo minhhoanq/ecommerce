@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/minhhoanq/lifeat/user_service/internal/entity"
+	"github.com/minhhoanq/ecommerce/user_service/internal/entity"
 
 	"github.com/google/uuid"
 )

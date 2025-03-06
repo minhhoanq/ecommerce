@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/config"
-	"github.com/minhhoanq/lifeat/order_service/internal/app/order_service"
-	"github.com/minhhoanq/lifeat/order_service/internal/initial"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/config"
+	"github.com/minhhoanq/ecommerce/order_service/internal/app/order_service"
+	"github.com/minhhoanq/ecommerce/order_service/internal/initial"
 	"go.uber.org/zap"
 )
 

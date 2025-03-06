@@ -11,7 +11,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	_ "github.com/lib/pq" // PostgreSQL driver
-	"github.com/minhhoanq/lifeat/order_service/config"
+	"github.com/minhhoanq/ecommerce/order_service/config"
 )
 
 var (

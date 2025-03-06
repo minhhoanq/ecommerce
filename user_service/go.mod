@@ -1,4 +1,4 @@
-module github.com/minhhoanq/lifeat/user_service
+module github.com/minhhoanq/ecommerce/user_service
 
 go 1.23.6
 
@@ -12,7 +12,7 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/lib/pq v1.10.9
-	github.com/minhhoanq/lifeat/common v0.0.0-00010101000000-000000000000
+	github.com/minhhoanq/ecommerce/common v0.0.0-00010101000000-000000000000
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
@@ -82,4 +82,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/minhhoanq/lifeat/common => ../common
+replace github.com/minhhoanq/ecommerce/common => ../common

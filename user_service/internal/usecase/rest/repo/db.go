@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/minhhoanq/lifeat/user_service/pkg/postgres"
+	"github.com/minhhoanq/ecommerce/user_service/pkg/postgres"
 )
 
 type SQLStore struct {

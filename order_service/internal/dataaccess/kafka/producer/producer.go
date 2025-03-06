@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/IBM/sarama"
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/config"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/config"
 	"go.uber.org/zap"
 )
 

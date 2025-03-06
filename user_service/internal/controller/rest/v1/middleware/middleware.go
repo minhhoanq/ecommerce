@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/minhhoanq/lifeat/user_service/internal/token"
+	"github.com/minhhoanq/ecommerce/user_service/internal/token"
 
 	"github.com/labstack/echo/v4"
 )

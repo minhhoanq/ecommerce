@@ -3,8 +3,8 @@ package order_service
 import (
 	"context"
 
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/order_service/internal/handler/grpc"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc"
 	"go.uber.org/zap"
 )
 

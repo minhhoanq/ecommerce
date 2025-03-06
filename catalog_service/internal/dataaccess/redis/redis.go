@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"github.com/minhhoanq/lifeat/catalog_service/configs"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/configs"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/redis/go-redis/v9"
 )
 

@@ -3,7 +3,7 @@ package logger
 import (
 	"log"
 
-	"github.com/minhhoanq/lifeat/common/constants"
+	"github.com/minhhoanq/ecommerce/common/constants"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

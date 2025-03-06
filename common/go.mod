@@ -1,4 +1,4 @@
-module github.com/minhhoanq/lifeat/common
+module github.com/minhhoanq/ecommerce/common
 
 go 1.22.2
 

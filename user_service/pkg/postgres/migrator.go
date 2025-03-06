@@ -6,7 +6,8 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"github.com/minhhoanq/lifeat/user_service/config"
+
+	"github.com/minhhoanq/ecommerce/user_service/config"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"

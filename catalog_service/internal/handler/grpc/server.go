@@ -6,9 +6,9 @@ import (
 	"net"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/validator"
-	"github.com/minhhoanq/lifeat/catalog_service/configs"
-	pb "github.com/minhhoanq/lifeat/catalog_service/internal/generated/catalog_service"
-	"github.com/minhhoanq/lifeat/common/logger"
+	"github.com/minhhoanq/ecommerce/catalog_service/configs"
+	pb "github.com/minhhoanq/ecommerce/catalog_service/internal/generated/catalog_service"
+	"github.com/minhhoanq/ecommerce/common/logger"
 	"go.uber.org/zap"
 
 	"google.golang.org/grpc"

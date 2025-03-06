@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	"github.com/hibiken/asynq"
-	"github.com/minhhoanq/lifeat/common/logger"
-	"github.com/minhhoanq/lifeat/user_service/internal/email"
-	"github.com/minhhoanq/lifeat/user_service/internal/handler/producers"
-	"github.com/minhhoanq/lifeat/user_service/internal/usecase/rest/repo"
-	"github.com/minhhoanq/lifeat/user_service/internal/util"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/internal/email"
+	"github.com/minhhoanq/ecommerce/user_service/internal/handler/producers"
+	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
+	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 	"go.uber.org/zap"
 )
 

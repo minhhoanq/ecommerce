@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	"github.com/minhhoanq/lifeat/common/logger"
-	pb "github.com/minhhoanq/lifeat/order_service/internal/generated/order_service"
-	"github.com/minhhoanq/lifeat/order_service/internal/service"
+	"github.com/minhhoanq/ecommerce/common/logger"
+	pb "github.com/minhhoanq/ecommerce/order_service/internal/generated/order_service"
+	"github.com/minhhoanq/ecommerce/order_service/internal/service"
 )
 
 type Handler struct {
