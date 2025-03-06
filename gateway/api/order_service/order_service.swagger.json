@@ -1,0 +1,167 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "order_service/order_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OrderService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/order_service.OrderService/CreateOrder": {
+      "post": {
+        "operationId": "OrderService_CreateOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/order_serviceCreateOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/order_serviceCreateOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "order_serviceCartItems": {
+      "type": "object",
+      "properties": {
+        "skuId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "order_serviceCreateOrderRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "cartItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/order_serviceCartItems"
+          }
+        }
+      }
+    },
+    "order_serviceCreateOrderResponse": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/order_serviceOrder"
+        }
+      }
+    },
+    "order_serviceOrder": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "paymentMethod": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/order_serviceOrderItem"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "order_serviceOrderItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "skuId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

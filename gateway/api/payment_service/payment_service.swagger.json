@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "payment_service/payment_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "PaymentService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/payment_service.PaymentService/CreatePayment": {
+      "post": {
+        "operationId": "PaymentService_CreatePayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/payment_serviceCreatePaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payment_serviceCreatePaymentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PaymentService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "PaymentStatusValues": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "SUCCESS",
+        "FAILED"
+      ],
+      "default": "PENDING"
+    },
+    "payment_serviceCreatePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "onlPaymentIntentId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "paymentMethod": {
+          "type": "string"
+        }
+      }
+    },
+    "payment_serviceCreatePaymentResponse": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/payment_servicePayment"
+        }
+      }
+    },
+    "payment_servicePayment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "onlPaymentIntentId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "status": {
+          "$ref": "#/definitions/PaymentStatusValues"
+        },
+        "paymentMethod": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

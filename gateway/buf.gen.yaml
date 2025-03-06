@@ -1,0 +1,24 @@
+version: v2
+plugins:
+    - remote: buf.build/protocolbuffers/go
+      out: internal/generated
+      opt: paths=source_relative
+
+    - remote: buf.build/grpc/go
+      out: internal/generated
+      opt: paths=source_relative
+
+    - remote: buf.build/grpc-ecosystem/gateway
+      out: internal/generated
+      opt:
+          - paths=source_relative
+          - generate_unbound_methods=true
+
+    - remote: buf.build/bufbuild/validate-go
+      out: internal/generated
+      opt: paths=source_relative
+
+    - remote: buf.build/grpc-ecosystem/openapiv2:v2.19.1
+      out: api
+      opt:
+          - generate_unbound_methods=true

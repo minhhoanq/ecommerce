@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package order_service;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "generated/order_service";
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+}
+
+message CreateOrderRequest {
+    string user_id = 1;
+    repeated CartItems cart_items = 2;
+}
+
+message CreateOrderResponse {
+    Order order = 1;
+}
+
+message CartItems {
+    string sku_id = 1;
+    int32 quantity = 2;
+}
+
+message Order {
+  string id = 1;
+  string user_id = 2;
+  string status = 3;
+  string payment_method = 4;
+  repeated OrderItem items = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message OrderItem {
+  string id = 1;
+  string order_id = 2;
+  string sku_id = 3;
+  int32 quantity = 4;
+}

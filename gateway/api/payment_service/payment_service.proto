@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package payment_service;
+
+option go_package = "generated/payment_service";
+
+service PaymentService {
+    rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+}
+
+message PaymentStatus {
+    enum Values {
+        PENDING = 0;
+        SUCCESS = 1;
+        FAILED = 2;
+    }
+}
+
+message CreatePaymentRequest {
+    string order_id = 1;
+    string onl_payment_intent_id = 2;
+    int64 amount = 3;
+    string payment_method = 4;
+}
+
+message CreatePaymentResponse {
+    Payment payment = 1;
+}
+
+message Payment {
+    string id = 1;
+    string order_id = 2;
+    string onl_payment_intent_id = 3;
+    int64 amount = 4;
+    PaymentStatus.Values status = 5;
+    string payment_method = 6;
+}

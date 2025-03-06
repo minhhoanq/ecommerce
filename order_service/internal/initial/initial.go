@@ -9,9 +9,9 @@ import (
 	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/kafka/consumer"
 	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/kafka/producer"
 	"github.com/minhhoanq/ecommerce/order_service/internal/dataaccess/redis"
+	"github.com/minhhoanq/ecommerce/order_service/internal/handler/consumers"
 	"github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc"
 	catalogservice "github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc/clients/catalog_service"
-	"github.com/minhhoanq/ecommerce/order_service/internal/handler/grpc/consumers"
 	"github.com/minhhoanq/ecommerce/order_service/internal/service"
 	"go.uber.org/zap"
 )
