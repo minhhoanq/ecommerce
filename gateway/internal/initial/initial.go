@@ -12,7 +12,9 @@ import (
 	"github.com/minhhoanq/ecommerce/gateway/config"
 	"github.com/minhhoanq/ecommerce/gateway/internal/app/gateway"
 	"github.com/minhhoanq/ecommerce/gateway/internal/app/gateway/middleware"
+	catalogservice "github.com/minhhoanq/ecommerce/gateway/internal/handler/grpc/clients/catalog_service"
 	orderservice "github.com/minhhoanq/ecommerce/gateway/internal/handler/grpc/clients/order_service"
+	"github.com/minhhoanq/ecommerce/gateway/internal/modules/catalog"
 	"github.com/minhhoanq/ecommerce/gateway/internal/modules/order"
 	"github.com/minhhoanq/ecommerce/gateway/internal/routes"
 	"go.uber.org/zap"
@@ -42,7 +44,15 @@ func Initial(cfg config.Config, l logger.Interface) {
 	}
 
 	orderOperator := order.NewOrderManagementOperator(orderServiceGRPCClient, l)
-	routes.NewRouter(handler, l, orderOperator)
+
+	catalogServiceGRPCClient, err := catalogservice.NewClient(cfg, l)
+	if err != nil {
+		l.Error("failed to get instance catalog service grpc client", zap.Error(err))
+	}
+
+	catalogOperator := catalog.NewCatalogManagementOperator(catalogServiceGRPCClient, l)
+
+	routes.NewRouter(handler, l, orderOperator, catalogOperator)
 
 	// wait group
 	waitGroup, ctx := errgroup.WithContext(ctx)
