@@ -71,7 +71,7 @@ message CreateProductRequest {
   // Product basic information
   string name = 1;
   string description = 2;
-  string image = 3;
+  bytes image = 3;
   int32 category_id = 4;
   int32 brand_id = 5;
 

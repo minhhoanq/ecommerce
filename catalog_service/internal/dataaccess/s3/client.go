@@ -17,7 +17,7 @@ import (
 
 type Client interface {
 	CreateBucketIfNotExist(ctx context.Context) error
-	UploadFile(ctx context.Context, fileName string, fileData io.Reader) error
+	UploadFile(ctx context.Context, fileName string, fileData []byte) error
 	GetFile(ctx context.Context, fileName string) ([]byte, error)
 }
 
@@ -68,13 +68,14 @@ func (s *S3Client) CreateBucketIfNotExist(ctx context.Context) error {
 	return nil
 }
 
-func (s *S3Client) UploadFile(ctx context.Context, fileName string, fileData io.Reader) error {
+func (s *S3Client) UploadFile(ctx context.Context, fileName string, fileData []byte) error {
+	fileReader := bytes.NewReader(fileData)
 	_, err := s.client.PutObject(
 		ctx,
 		&s3.PutObjectInput{
 			Bucket: aws.String(s.bucket),
 			Key:    aws.String(fileName),
-			Body:   fileData,
+			Body:   fileReader,
 		},
 	)
 	if err != nil {

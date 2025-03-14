@@ -326,7 +326,8 @@
           "type": "string"
         },
         "image": {
-          "type": "string"
+          "type": "string",
+          "format": "byte"
         },
         "categoryId": {
           "type": "integer",

@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -47,20 +49,35 @@ type CreateAttributeParams struct {
 	Value       string `json:"value"`
 }
 
-func (c *catalogHandlerFunc) createProduct(e echo.Context) error {
+func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
 	var req CreateProductParams
 
-	if err := e.Bind(&req); err != nil {
-		return e.JSON(http.StatusBadRequest, err.Error())
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	c.l.Info("order params: ", zap.String("order: ", req.Name))
-	c.l.Info("order params: ", zap.Int32("order: ", req.SKUs[0].Attributes[0].AttributeID))
+	image, err := c.FormFile("image")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	file, err := image.Open()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	defer file.Close()
+
+	buf := new(bytes.Buffer)
+	if _, err := io.Copy(buf, file); err != nil {
+		return fmt.Errorf("failed to copy buffer file image")
+	}
+
+	catalogHandler.l.Info("order params: ", zap.String("order: ", image.Filename))
 
 	arg := &catalog_service.CreateProductRequest{
 		Name:        req.Name,
 		Description: req.Description,
-		Image:       "",
+		Image:       buf.Bytes(),
 		CategoryId:  req.CategoryID,
 		BrandId:     req.BrandID,
 		Skus:        make([]*catalog_service.SKUToCreate, 0, len(req.SKUs)),
@@ -82,19 +99,13 @@ func (c *catalogHandlerFunc) createProduct(e echo.Context) error {
 			})
 		}
 
-		fmt.Println("sku", len(sku.Attributes))
-
 		arg.Skus = append(arg.Skus, sku)
 	}
 
-	fmt.Println("dawjdaiw", arg.Skus[0].Name)
-
-	product, err := c.catalogManagementOperator.CreateProduct(e.Request().Context(), arg)
-	fmt.Println("dawjdaiw 2")
-
+	product, err := catalogHandler.catalogManagementOperator.CreateProduct(c.Request().Context(), arg)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	return e.JSON(http.StatusCreated, product)
+	return c.JSON(http.StatusCreated, product)
 }

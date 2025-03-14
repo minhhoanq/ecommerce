@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/s3"
 	pb "github.com/minhhoanq/ecommerce/catalog_service/internal/generated/catalog_service"
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/generated/user_service"
 	"github.com/minhhoanq/ecommerce/common/logger"
@@ -31,9 +32,14 @@ type catalogService struct {
 	l                 logger.Interface
 	catalogAccessor   database.CatalogDataAccessor
 	userServiceClient user_service.UserServiceClient
+	s3Client          s3.Client
 }
 
-func NewCatalogService(db *gorm.DB, l logger.Interface, catalogAccessor database.CatalogDataAccessor, userServiceClient user_service.UserServiceClient) CatalogService {
+func NewCatalogService(db *gorm.DB,
+	l logger.Interface,
+	catalogAccessor database.CatalogDataAccessor,
+	userServiceClient user_service.UserServiceClient,
+	s3Client s3.Client) CatalogService {
 	return &catalogService{
 		db:                db,
 		l:                 l,
@@ -99,11 +105,12 @@ func convertProductResponse(dbResponse *database.ProductDetail) *pb.ProductWithS
 
 func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
 	c.l.Info("Create product in service")
+	c.s3Client.UploadFile(ctx, arg.Name, arg.Image)
 	// Transform protobuf request to database parameters
 	dbParams := &database.CreateProductParams{
 		Name:        arg.Name,
 		Description: arg.Description,
-		Image:       arg.Image,
+		Image:       "",
 		CategoryID:  arg.CategoryId,
 		BrandID:     arg.BrandId,
 		SKUs:        make([]database.CreateSKUParams, 0, len(arg.Skus)),
