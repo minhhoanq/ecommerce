@@ -30,6 +30,8 @@ type Config struct {
 	KafkaBrokers         string `mapstructure:"KAFKA_BROKERS"`
 	KafkaClientId        string `mapstructure:"KAFKA_CLIENT_ID"`
 	KafkaConsumerGroupId string `mapstructure:"KAFKA_CONSUMER_GROUP_ID"`
+	S3Bucket             string `mapstructure:"S3_BUCKET"`
+	S3Region             string `mapstructure:"S3_REGION"`
 }
 
 // LoadConfig reads configuration from file or enviroment variables.
