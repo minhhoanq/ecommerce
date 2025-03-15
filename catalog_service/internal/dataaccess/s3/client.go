@@ -69,6 +69,9 @@ func (s *S3Client) CreateBucketIfNotExist(ctx context.Context) error {
 }
 
 func (s *S3Client) UploadFile(ctx context.Context, fileName string, fileData []byte) error {
+	fmt.Println("process upload image")
+	fmt.Println("image: ")
+
 	fileReader := bytes.NewReader(fileData)
 	_, err := s.client.PutObject(
 		ctx,

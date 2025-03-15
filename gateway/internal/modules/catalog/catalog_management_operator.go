@@ -9,7 +9,7 @@ import (
 )
 
 type CatalogManagementOperator interface {
-	CreateProduct(ctx context.Context, arg *catalog_service.CreateProductRequest) (*catalog_service.CreateProductResponse, error)
+	CreateProduct(ctx context.Context, arg *catalog_service.CreateProductWithImageRequest) (*catalog_service.CreateProductResponse, error)
 }
 
 type catalogManagementOperator struct {
@@ -26,19 +26,13 @@ func NewCatalogManagementOperator(
 	}
 }
 
-func (c *catalogManagementOperator) CreateProduct(ctx context.Context, arg *catalog_service.CreateProductRequest) (*catalog_service.CreateProductResponse, error) {
+func (c *catalogManagementOperator) CreateProduct(ctx context.Context, arg *catalog_service.CreateProductWithImageRequest) (*catalog_service.CreateProductResponse, error) {
 
 	product, err := c.catalogServiceClient.CreateProduct(ctx, arg)
 	if err != nil {
 		c.l.Error("failed to create product", zap.Error(err))
 		return nil, err
 	}
-
-	// fmt.Println("product", product.Product.Product.Id)
-
-	// response := &catalog_service.CreateProductResponse{
-	// 	Product: product.Product,
-	// }
 
 	return product, nil
 }

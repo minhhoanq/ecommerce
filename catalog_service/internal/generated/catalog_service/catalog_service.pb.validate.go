@@ -805,6 +805,167 @@ var _ interface {
 	ErrorName() string
 } = InventoryValidationError{}
 
+// Validate checks the field values on CreateProductWithImageRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateProductWithImageRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateProductWithImageRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CreateProductWithImageRequestMultiError, or nil if none found.
+func (m *CreateProductWithImageRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateProductWithImageRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateProductWithImageRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateProductWithImageRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateProductWithImageRequestValidationError{
+				field:  "Metadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetImageInfo()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateProductWithImageRequestValidationError{
+					field:  "ImageInfo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateProductWithImageRequestValidationError{
+					field:  "ImageInfo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetImageInfo()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateProductWithImageRequestValidationError{
+				field:  "ImageInfo",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreateProductWithImageRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateProductWithImageRequestMultiError is an error wrapping multiple
+// validation errors returned by CreateProductWithImageRequest.ValidateAll()
+// if the designated constraints aren't met.
+type CreateProductWithImageRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateProductWithImageRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateProductWithImageRequestMultiError) AllErrors() []error { return m }
+
+// CreateProductWithImageRequestValidationError is the validation error
+// returned by CreateProductWithImageRequest.Validate if the designated
+// constraints aren't met.
+type CreateProductWithImageRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateProductWithImageRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateProductWithImageRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateProductWithImageRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateProductWithImageRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateProductWithImageRequestValidationError) ErrorName() string {
+	return "CreateProductWithImageRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateProductWithImageRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateProductWithImageRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateProductWithImageRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateProductWithImageRequestValidationError{}
+
 // Validate checks the field values on CreateProductRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -831,7 +992,34 @@ func (m *CreateProductRequest) validate(all bool) error {
 
 	// no validation rules for Description
 
-	// no validation rules for Image
+	if all {
+		switch v := interface{}(m.GetImage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateProductRequestValidationError{
+					field:  "Image",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateProductRequestValidationError{
+					field:  "Image",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetImage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateProductRequestValidationError{
+				field:  "Image",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for CategoryId
 
@@ -950,6 +1138,109 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateProductRequestValidationError{}
+
+// Validate checks the field values on ImageInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ImageInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ImageInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ImageInfoMultiError, or nil
+// if none found.
+func (m *ImageInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ImageInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for OriginalFileName
+
+	// no validation rules for ImageData
+
+	if len(errors) > 0 {
+		return ImageInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// ImageInfoMultiError is an error wrapping multiple validation errors returned
+// by ImageInfo.ValidateAll() if the designated constraints aren't met.
+type ImageInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ImageInfoMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ImageInfoMultiError) AllErrors() []error { return m }
+
+// ImageInfoValidationError is the validation error returned by
+// ImageInfo.Validate if the designated constraints aren't met.
+type ImageInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ImageInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ImageInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ImageInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ImageInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ImageInfoValidationError) ErrorName() string { return "ImageInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ImageInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sImageInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ImageInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ImageInfoValidationError{}
 
 // Validate checks the field values on SKUToCreate with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

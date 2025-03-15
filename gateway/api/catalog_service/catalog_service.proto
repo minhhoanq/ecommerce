@@ -8,7 +8,7 @@ option go_package = "generated/catalog_service";
 
 // Product service definition
 service CatalogService {
-  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc CreateProduct(CreateProductWithImageRequest) returns (CreateProductResponse);
   rpc ListProduct(ListProductRequest) returns (ListProductResponse);
   rpc CreateCart(CreateCartRequest) returns (CreateCartResponse);
   rpc AddToCartItem(AddToCartItemRequest) returns (AddToCartItemResponse);
@@ -67,16 +67,26 @@ message Inventory {
 
 //------------------ Request and Response Messages ------------------
 // Request message for creating a new product with SKUs
+message CreateProductWithImageRequest {
+  CreateProductRequest metadata = 1;
+  ImageInfo image_info = 2;
+}
+
 message CreateProductRequest {
   // Product basic information
   string name = 1;
   string description = 2;
-  bytes image = 3;
+  ImageInfo image = 3;
   int32 category_id = 4;
   int32 brand_id = 5;
 
   // SKUs associated with the product
   repeated SKUToCreate skus = 6;
+}
+
+message ImageInfo {
+  string original_file_name = 1;
+  bytes image_data = 2;
 }
 
 // SKU creation information

@@ -18,7 +18,7 @@ import (
 )
 
 type CatalogService interface {
-	CreateProduct(ctx context.Context, arg *pb.CreateProductRequest) (*pb.CreateProductResponse, error)
+	CreateProduct(ctx context.Context, arg *pb.CreateProductWithImageRequest) (*pb.CreateProductResponse, error)
 	ListProduct(ctx context.Context, arg *pb.ListProductRequest) (*pb.ListProductResponse, error)
 	CreateCart(ctx context.Context, arg *pb.CreateCartRequest) (*pb.CreateCartResponse, error)
 	AddToCartItem(ctx context.Context, arg *pb.AddToCartItemRequest) (*pb.AddToCartItemResponse, error)
@@ -45,6 +45,7 @@ func NewCatalogService(db *gorm.DB,
 		l:                 l,
 		catalogAccessor:   catalogAccessor,
 		userServiceClient: userServiceClient,
+		s3Client:          s3Client,
 	}
 }
 
@@ -103,21 +104,35 @@ func convertProductResponse(dbResponse *database.ProductDetail) *pb.ProductWithS
 	return response
 }
 
-func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
+func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProductWithImageRequest) (*pb.CreateProductResponse, error) {
+	if c == nil || c.s3Client == nil || c.catalogAccessor == nil {
+		return nil, fmt.Errorf("service dependencies are not initialized")
+	}
+
+	if arg == nil || arg.GetImageInfo() == nil || arg.GetMetadata() == nil {
+		return nil, fmt.Errorf("invalid request: missing required fields")
+	}
+
 	c.l.Info("Create product in service")
-	c.s3Client.UploadFile(ctx, arg.Name, arg.Image)
+	// c.l.Info("Create product in service: ", zap.Any("ac", arg.GetImageInfo().GetImageData()))
+
+	err := c.s3Client.UploadFile(ctx, arg.GetImageInfo().OriginalFileName, arg.GetImageInfo().GetImageData())
+	if err != nil {
+		return nil, fmt.Errorf("failed to upload image to cloud: ", err)
+	}
+
 	// Transform protobuf request to database parameters
 	dbParams := &database.CreateProductParams{
-		Name:        arg.Name,
-		Description: arg.Description,
+		Name:        arg.GetMetadata().Name,
+		Description: arg.GetMetadata().Description,
 		Image:       "",
-		CategoryID:  arg.CategoryId,
-		BrandID:     arg.BrandId,
-		SKUs:        make([]database.CreateSKUParams, 0, len(arg.Skus)),
+		CategoryID:  arg.GetMetadata().CategoryId,
+		BrandID:     arg.GetMetadata().BrandId,
+		SKUs:        make([]database.CreateSKUParams, 0, len(arg.GetMetadata().Skus)),
 	}
 
 	// Transform SKU parameters
-	for _, skuProto := range arg.Skus {
+	for _, skuProto := range arg.GetMetadata().Skus {
 		skuParams := database.CreateSKUParams{
 			Name: skuProto.Name,
 			Slug: skuProto.Slug,
@@ -146,7 +161,7 @@ func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProduc
 	dbResponse, err := c.catalogAccessor.CreateProduct(ctx, dbParams)
 	if err != nil {
 		c.l.Error("failed to create product in database",
-			zap.String("product_name", arg.Name),
+			zap.String("product_name", arg.GetMetadata().Name),
 			zap.Error(err))
 		return nil, err
 	}

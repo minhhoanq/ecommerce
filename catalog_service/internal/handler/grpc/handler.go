@@ -25,7 +25,7 @@ func NewHandler(catalogService service.CatalogService, l logger.Interface, redis
 	}, nil
 }
 
-func (h *Handler) CreateProduct(ctx context.Context, arg *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
+func (h *Handler) CreateProduct(ctx context.Context, arg *pb.CreateProductWithImageRequest) (*pb.CreateProductResponse, error) {
 	h.l.Info("Create product in handler")
 	fmt.Println("handle create product")
 	product, err := h.catalogService.CreateProduct(ctx, arg)

@@ -103,7 +103,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalog_serviceCreateProductRequest"
+              "$ref": "#/definitions/catalog_serviceCreateProductWithImageRequest"
             }
           }
         ],
@@ -326,8 +326,7 @@
           "type": "string"
         },
         "image": {
-          "type": "string",
-          "format": "byte"
+          "$ref": "#/definitions/catalog_serviceImageInfo"
         },
         "categoryId": {
           "type": "integer",
@@ -345,8 +344,7 @@
           },
           "title": "SKUs associated with the product"
         }
-      },
-      "title": "------------------ Request and Response Messages ------------------\nRequest message for creating a new product with SKUs"
+      }
     },
     "catalog_serviceCreateProductResponse": {
       "type": "object",
@@ -357,6 +355,18 @@
         }
       },
       "title": "Response message for product creation"
+    },
+    "catalog_serviceCreateProductWithImageRequest": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/catalog_serviceCreateProductRequest"
+        },
+        "imageInfo": {
+          "$ref": "#/definitions/catalog_serviceImageInfo"
+        }
+      },
+      "title": "------------------ Request and Response Messages ------------------\nRequest message for creating a new product with SKUs"
     },
     "catalog_serviceGetInventorySKURequest": {
       "type": "object",
@@ -387,6 +397,18 @@
       "properties": {
         "sku": {
           "$ref": "#/definitions/catalog_serviceSKU"
+        }
+      }
+    },
+    "catalog_serviceImageInfo": {
+      "type": "object",
+      "properties": {
+        "originalFileName": {
+          "type": "string"
+        },
+        "imageData": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -50,9 +51,10 @@ type CreateAttributeParams struct {
 }
 
 func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
-	var req CreateProductParams
 
-	if err := c.Bind(&req); err != nil {
+	metadataJson := c.FormValue("metadata")
+	var req CreateProductParams
+	if err := json.Unmarshal([]byte(metadataJson), &req); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
@@ -72,12 +74,12 @@ func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
 		return fmt.Errorf("failed to copy buffer file image")
 	}
 
-	catalogHandler.l.Info("order params: ", zap.String("order: ", image.Filename))
+	catalogHandler.l.Info("order params: ", zap.String("order: ", req.Name))
+	catalogHandler.l.Info("order params: ", zap.String("iamge: ", image.Filename))
 
-	arg := &catalog_service.CreateProductRequest{
+	metadata := &catalog_service.CreateProductRequest{
 		Name:        req.Name,
 		Description: req.Description,
-		Image:       buf.Bytes(),
 		CategoryId:  req.CategoryID,
 		BrandId:     req.BrandID,
 		Skus:        make([]*catalog_service.SKUToCreate, 0, len(req.SKUs)),
@@ -99,7 +101,17 @@ func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
 			})
 		}
 
-		arg.Skus = append(arg.Skus, sku)
+		metadata.Skus = append(metadata.Skus, sku)
+	}
+
+	imageInfo := &catalog_service.ImageInfo{
+		OriginalFileName: image.Filename,
+		ImageData:        buf.Bytes(),
+	}
+
+	arg := &catalog_service.CreateProductWithImageRequest{
+		Metadata:  metadata,
+		ImageInfo: imageInfo,
 	}
 
 	product, err := catalogHandler.catalogManagementOperator.CreateProduct(c.Request().Context(), arg)
