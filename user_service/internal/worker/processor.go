@@ -5,8 +5,8 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database"
 	"github.com/minhhoanq/ecommerce/user_service/internal/email"
-	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
 	"go.uber.org/zap"
 )
 
@@ -22,15 +22,15 @@ type TaskProcessor interface {
 }
 
 type RedisTaskProcessor struct {
-	server *asynq.Server
-	l      logger.Interface
-	mailer email.EmailSender
-	q      repo.Querier
+	server           *asynq.Server
+	l                logger.Interface
+	mailer           email.EmailSender
+	userDataAccessor database.UserDataAccessor
 }
 
 func NewRedisTaskProcessor(redisOpts asynq.RedisClientOpt,
 	mailer email.EmailSender,
-	q repo.Querier,
+	userDataAccessor database.UserDataAccessor,
 	l logger.Interface) TaskProcessor {
 	server := asynq.NewServer(redisOpts,
 		asynq.Config{
@@ -45,10 +45,10 @@ func NewRedisTaskProcessor(redisOpts asynq.RedisClientOpt,
 	)
 
 	return &RedisTaskProcessor{
-		server: server,
-		mailer: mailer,
-		q:      q,
-		l:      l,
+		server:           server,
+		mailer:           mailer,
+		userDataAccessor: userDataAccessor,
+		l:                l,
 	}
 }
 

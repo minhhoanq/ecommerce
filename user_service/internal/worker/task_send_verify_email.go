@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
-	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
+	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database"
 	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 	"go.uber.org/zap"
 )
@@ -51,7 +51,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 		return fmt.Errorf("failed to unmarshal payload: %w", asynq.SkipRetry)
 	}
 
-	user, err := processor.q.GetUserByID(ctx, payload.UserId)
+	user, err := processor.userDataAccessor.GetUserByID(ctx, payload.UserId)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return fmt.Errorf("user not found %w", asynq.SkipRetry)
@@ -60,7 +60,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 		return fmt.Errorf("failed to get user: %w", asynq.SkipRetry)
 	}
 
-	verifyEmail, err := processor.q.CreateVerifyEmail(ctx, repo.CreateVerifyEmailParams{
+	verifyEmail, err := processor.userDataAccessor.CreateVerifyEmail(ctx, database.CreateVerifyEmailParams{
 		UserId:     user.ID,
 		Email:      user.Email,
 		SecretCode: util.RamdomString(32),

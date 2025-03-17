@@ -7,9 +7,9 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/minhhoanq/ecommerce/common/logger"
+	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database"
 	"github.com/minhhoanq/ecommerce/user_service/internal/email"
 	"github.com/minhhoanq/ecommerce/user_service/internal/handler/producers"
-	"github.com/minhhoanq/ecommerce/user_service/internal/usecase/rest/repo"
 	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 	"go.uber.org/zap"
 )
@@ -19,23 +19,23 @@ type UserSignupHandler interface {
 }
 
 type userSignupHandler struct {
-	mailer email.EmailSender
-	q      repo.Querier
-	l      logger.Interface
+	mailer           email.EmailSender
+	userDataAccessor database.UserDataAccessor
+	l                logger.Interface
 }
 
-func NewUserSignupHandler(mailer email.EmailSender, q repo.Querier, l logger.Interface) UserSignupHandler {
+func NewUserSignupHandler(mailer email.EmailSender, userDataAccessor database.UserDataAccessor, l logger.Interface) UserSignupHandler {
 	return &userSignupHandler{
-		mailer: mailer,
-		q:      q,
-		l:      l,
+		mailer:           mailer,
+		userDataAccessor: userDataAccessor,
+		l:                l,
 	}
 }
 
 func (u userSignupHandler) Handle(ctx context.Context, message producers.UserSignupParams) error {
 	u.l.Info("Process user signup event")
 
-	user, err := u.q.GetUserByID(ctx, message.UserId)
+	user, err := u.userDataAccessor.GetUserByID(ctx, message.UserId)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return fmt.Errorf("user not found %w", asynq.SkipRetry)
@@ -44,7 +44,7 @@ func (u userSignupHandler) Handle(ctx context.Context, message producers.UserSig
 		return fmt.Errorf("failed to get user: %w", asynq.SkipRetry)
 	}
 
-	verifyEmail, err := u.q.CreateVerifyEmail(ctx, repo.CreateVerifyEmailParams{
+	verifyEmail, err := u.userDataAccessor.CreateVerifyEmail(ctx, database.CreateVerifyEmailParams{
 		UserId:     user.ID,
 		Email:      user.Email,
 		SecretCode: util.RamdomString(32),

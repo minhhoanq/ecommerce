@@ -1,6 +1,0 @@
-DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS verify_emails;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS role_resources;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS resources;

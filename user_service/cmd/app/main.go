@@ -3,17 +3,31 @@ package main
 import (
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/minhhoanq/ecommerce/user_service/config"
-	rest "github.com/minhhoanq/ecommerce/user_service/internal/app/http"
+	"github.com/minhhoanq/ecommerce/user_service/internal/app/user_service"
+	"github.com/minhhoanq/ecommerce/user_service/internal/initial"
+	"go.uber.org/zap"
 )
 
 func main() {
-	cfg, err := config.LoadConfig(".")
+	//init config
+	config, err := config.LoadConfig(".")
 	if err != nil {
 		panic(err)
 	}
 
-	// init logger
-	logger.Setup(cfg.Environment, cfg.LogLevel)
-	// start rest server
-	rest.RunRestServer(cfg)
+	// Inittial logger
+
+	logger.Setup(config.Environment, config.LogLevel)
+	l := logger.NewWrapLogger(zap.DebugLevel, false)
+
+	// Initial server
+	grpcServer, err := initial.InitialServer(config, l)
+	if err != nil {
+		l.Error("failed to initial server", zap.Error(err))
+	}
+
+	// NewServer
+	server := user_service.NewServer(grpcServer, l)
+
+	server.Start()
 }

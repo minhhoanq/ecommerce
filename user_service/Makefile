@@ -18,13 +18,14 @@ dropdb:
 	docker exec -it user_service_psql dropdb lifeat_user_service_psql
 
 migrate-create:
-	migrate create -ext sql -dir migrations -seq $(name)
+	migrate create -ext sql -dir ./internal/dataaccess/database/migrations/postgres -seq $(name)
 
 migrateup:
-	migrate -path pkg/postgres/migrations -database 'postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable' up
+	migrate -path ./internal/dataaccess/database/migrations/postgres -database 'postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable' up
 
 migratedown:
-	migrate -path pkg/postgres/migrations -database 'postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable' down
+	migrate -path ./internal/dataaccess/database/migrations/postgres -database 'postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?sslmode=disable' down
+
 
 redis:
 	docker run --name lifeat-redis -p 6379:6379 -d redis:7-alpine
