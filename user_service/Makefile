@@ -1,7 +1,7 @@
 include app.env
 
 proto:
-	buf generate api/v1
+	buf generate api
 
 build:
 	go build \

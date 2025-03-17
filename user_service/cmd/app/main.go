@@ -14,8 +14,6 @@ func main() {
 
 	// init logger
 	logger.Setup(cfg.Environment, cfg.LogLevel)
-
 	// start rest server
 	rest.RunRestServer(cfg)
-
 }
