@@ -9,7 +9,7 @@ import (
 const alphabet = "abcdfeghijklmnopqrstuvwxyz"
 
 // RandomString generates a random string of length n
-func RamdomString(n int) string {
+func RandomString(n int) string {
 	var sb strings.Builder
 	k := len(alphabet)
 
@@ -23,10 +23,10 @@ func RamdomString(n int) string {
 
 // RandomEmail generates a random email
 func RandomEmail() string {
-	return fmt.Sprintf("%s@gmail.com", RamdomString(6))
+	return fmt.Sprintf("%s@gmail.com", RandomString(6))
 }
 
 // RandomUsername generates a random username
 func RandomUsername() string {
-	return RamdomString(6)
+	return RandomString(6)
 }

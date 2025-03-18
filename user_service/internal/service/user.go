@@ -23,7 +23,7 @@ type UserService interface {
 	GetUserByID(ctx context.Context, id uuid.UUID) (*database.User, error)
 	CreateUser(context.Context, CreateUserParams) (*database.User, error)
 	Login(context.Context, LoginUsecaseParams) (*LoginUscaseResponse, error)
-	RenewAccessToken(ctx context.Context, arg RenewAccessTokenUsecaseParams) (*renewAccessTokenUsecaseResponse, error)
+	RenewAccessToken(ctx context.Context, arg RenewAccessTokenUsecaseParams) (*RenewAccessTokenUsecaseResponse, error)
 }
 
 type userService struct {
@@ -174,12 +174,12 @@ type RenewAccessTokenUsecaseParams struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type renewAccessTokenUsecaseResponse struct {
+type RenewAccessTokenUsecaseResponse struct {
 	AccessToken          string    `json:"access_token"`
 	AccessTokenExpiresAt time.Time `json:"access_token_expires_at"`
 }
 
-func (us *userService) RenewAccessToken(ctx context.Context, arg RenewAccessTokenUsecaseParams) (*renewAccessTokenUsecaseResponse, error) {
+func (us *userService) RenewAccessToken(ctx context.Context, arg RenewAccessTokenUsecaseParams) (*RenewAccessTokenUsecaseResponse, error) {
 	refreshTokenPayload, err := us.tokenMaker.VerifyToken(arg.RefreshToken)
 	if err != nil {
 		return nil, err
@@ -216,7 +216,7 @@ func (us *userService) RenewAccessToken(ctx context.Context, arg RenewAccessToke
 		return nil, err
 	}
 
-	rsp := &renewAccessTokenUsecaseResponse{
+	rsp := &RenewAccessTokenUsecaseResponse{
 		AccessToken:          accessToken,
 		AccessTokenExpiresAt: payload.ExpiredAt,
 	}

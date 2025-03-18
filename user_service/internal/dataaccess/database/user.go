@@ -107,7 +107,8 @@ func (u *userDataAccessor) CreateSession(ctx context.Context, arg CreateSessionP
 
 func (u *userDataAccessor) GetSessionByUserId(ctx context.Context, user_id uuid.UUID) (*Session, error) {
 	var session *Session
-	result := u.database.WithContext(ctx).First(&session).Where("user_id = ?", user_id)
+	result := u.database.WithContext(ctx).Where("user_id = ?", user_id).First(&session)
+	fmt.Println("result: ", session.UserId)
 	if result.Error != nil {
 		return nil, result.Error
 	}

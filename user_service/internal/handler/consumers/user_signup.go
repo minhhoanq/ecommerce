@@ -47,7 +47,7 @@ func (u userSignupHandler) Handle(ctx context.Context, message producers.UserSig
 	verifyEmail, err := u.userDataAccessor.CreateVerifyEmail(ctx, database.CreateVerifyEmailParams{
 		UserId:     user.ID,
 		Email:      user.Email,
-		SecretCode: util.RamdomString(32),
+		SecretCode: util.RandomString(32),
 	})
 
 	if err != nil {
