@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	//go:embed/migrations/postgres
+	//go:embed migrations/postgres
 	migrationDirectoryPostgres embed.FS
 )
 

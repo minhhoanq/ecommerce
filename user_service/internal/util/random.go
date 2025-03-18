@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 )
@@ -18,4 +19,14 @@ func RamdomString(n int) string {
 	}
 
 	return sb.String()
+}
+
+// RandomEmail generates a random email
+func RandomEmail() string {
+	return fmt.Sprintf("%s@gmail.com", RamdomString(6))
+}
+
+// RandomUsername generates a random username
+func RandomUsername() string {
+	return RamdomString(6)
 }

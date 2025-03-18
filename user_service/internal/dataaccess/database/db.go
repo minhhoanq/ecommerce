@@ -29,7 +29,7 @@ func New(cfg config.Config, l logger.Interface) (Database, error) {
 		return Database{}, err
 	}
 
-	db, err := NewDatabase(cfg, l)
+	db, err := newDatabase(cfg, l)
 	if err != nil {
 		l.Error("failed to connection to database", zap.Error(err))
 		return Database{}, err
@@ -41,9 +41,9 @@ func New(cfg config.Config, l logger.Interface) (Database, error) {
 	}, nil
 }
 
-func NewDatabase(cfg config.Config, l logger.Interface) (*gorm.DB, error) {
+func newDatabase(cfg config.Config, l logger.Interface) (*gorm.DB, error) {
 	// create data source name (DSN) string
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
 		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort)
 
 	// Open GORM database connection
