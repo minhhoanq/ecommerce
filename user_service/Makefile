@@ -36,4 +36,10 @@ server:
 evans:
 	evans --proto user_service.proto --path api/v1/user_service --host localhost --port 9000 repl
 
+mockdb:
+	mockgen -package mockdb -destination internal/dataaccess/mock/store.go github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database UserDataAccessor
+
+mockwk:
+	mockgen -package mockwk -destination internal/worker/mock/distributor.go github.com/minhhoanq/ecommerce/user_service/internal/worker TaskDistributor
+
 .PHONY: proto build postgres createdb dropdb migrate-create migrateup migratedown redis server proto
