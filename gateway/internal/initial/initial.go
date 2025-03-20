@@ -11,12 +11,16 @@ import (
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/minhhoanq/ecommerce/gateway/config"
 	"github.com/minhhoanq/ecommerce/gateway/internal/app/gateway"
-	"github.com/minhhoanq/ecommerce/gateway/internal/app/gateway/middleware"
 	catalogservice "github.com/minhhoanq/ecommerce/gateway/internal/handler/grpc/clients/catalog_service"
 	orderservice "github.com/minhhoanq/ecommerce/gateway/internal/handler/grpc/clients/order_service"
+	userservice "github.com/minhhoanq/ecommerce/gateway/internal/handler/grpc/clients/user_service"
 	"github.com/minhhoanq/ecommerce/gateway/internal/modules/catalog"
 	"github.com/minhhoanq/ecommerce/gateway/internal/modules/order"
+	"github.com/minhhoanq/ecommerce/gateway/internal/modules/user"
 	"github.com/minhhoanq/ecommerce/gateway/internal/routes"
+	"github.com/minhhoanq/ecommerce/gateway/internal/routes/middleware"
+	"github.com/minhhoanq/ecommerce/gateway/internal/token"
+	"github.com/minhhoanq/ecommerce/gateway/pkg/constants"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 )
@@ -52,7 +56,18 @@ func Initial(cfg config.Config, l logger.Interface) {
 
 	catalogOperator := catalog.NewCatalogManagementOperator(catalogServiceGRPCClient, l)
 
-	routes.NewRouter(handler, l, orderOperator, catalogOperator)
+	userServiceGRPCClient, err := userservice.NewClient(cfg, l)
+	if err != nil {
+		l.Error("failed to get instance user service grpc client", zap.Error(err))
+	}
+	userOperator := user.NewUserManagementOperator(userServiceGRPCClient, l)
+
+	tokenMaker, err := token.NewJWTMaker(constants.PublicKeyPath, constants.PrivateKeyPath)
+	if err != nil {
+		l.Error("failed to get token maker", zap.Error(err))
+	}
+
+	routes.NewRouter(handler, l, orderOperator, catalogOperator, userOperator, tokenMaker)
 
 	// wait group
 	waitGroup, ctx := errgroup.WithContext(ctx)
