@@ -22,7 +22,7 @@ import (
 type UserService interface {
 	GetUserByID(ctx context.Context, id uuid.UUID) (*database.User, error)
 	CreateUser(context.Context, CreateUserParams) (*database.User, error)
-	Login(context.Context, LoginUsecaseParams) (*LoginUscaseResponse, error)
+	Login(context.Context, LoginParams) (*LoginResponse, error)
 	RenewAccessToken(ctx context.Context, arg RenewAccessTokenUsecaseParams) (*RenewAccessTokenUsecaseResponse, error)
 }
 
@@ -108,7 +108,7 @@ func (us *userService) CreateUser(ctx context.Context, arg CreateUserParams) (*d
 	return &txResult.User, nil
 }
 
-type LoginUscaseResponse struct {
+type LoginResponse struct {
 	SessionID             int            `json:"session_id"`
 	AccessToken           string         `json:"access_token"`
 	RefreshToken          string         `json:"refresh_token"`
@@ -117,12 +117,12 @@ type LoginUscaseResponse struct {
 	User                  *database.User `json:"user"`
 }
 
-type LoginUsecaseParams struct {
+type LoginParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-func (us *userService) Login(ctx context.Context, arg LoginUsecaseParams) (*LoginUscaseResponse, error) {
+func (us *userService) Login(ctx context.Context, arg LoginParams) (*LoginResponse, error) {
 	user, err := us.userDataAccessor.GetUserByUsername(ctx, arg.Username)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -160,7 +160,7 @@ func (us *userService) Login(ctx context.Context, arg LoginUsecaseParams) (*Logi
 		return nil, fmt.Errorf("faild create session: %v", err)
 	}
 
-	return &LoginUscaseResponse{
+	return &LoginResponse{
 		SessionID:             session.ID,
 		AccessToken:           accessToken,
 		RefreshToken:          refreshToken,

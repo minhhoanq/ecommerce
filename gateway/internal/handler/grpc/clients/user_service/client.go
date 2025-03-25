@@ -10,7 +10,8 @@ import (
 )
 
 func NewClient(cfg config.Config, l logger.Interface) (user_service.UserServiceClient, error) {
-	var opts = []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	var opts = []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	conn, err := grpc.NewClient(cfg.GRPCUserAddress, opts...)
 	if err != nil {
@@ -19,6 +20,10 @@ func NewClient(cfg config.Config, l logger.Interface) (user_service.UserServiceC
 
 	client := user_service.NewUserServiceClient(conn)
 	l.Info("connection to user service grpc client", zap.String("Address: ", cfg.GRPCUserAddress))
+
+	// Kiểm tra trạng thái kết nối
+	state := conn.GetState().String()
+	l.Info("gRPC connection state", zap.String("State", state))
 
 	return client, nil
 }

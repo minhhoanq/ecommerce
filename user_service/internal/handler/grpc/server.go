@@ -50,7 +50,7 @@ func (s *server) Start(ctx context.Context) error {
 
 	grpcServer := grpc.NewServer(opts...)
 	reflection.Register(grpcServer)
+	pb.RegisterUserServiceServer(grpcServer, s.handler)
 	s.l.Info("gRPC server is running on", zap.String("Address: ", s.cfg.GRPCServerAddress))
-
 	return grpcServer.Serve(listener)
 }
