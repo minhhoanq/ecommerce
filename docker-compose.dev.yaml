@@ -48,6 +48,17 @@ services:
         volumes:
             - ./db/payment_service:/var/lib/postgresql/data
 
+    notification_service_mongod:
+        image: mongo:latest
+        restart: always
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=secret
+        volumes:
+            - ./db/notification_service:/data/db
+
     redis:
         image: redis:7-alpine
         restart: always
