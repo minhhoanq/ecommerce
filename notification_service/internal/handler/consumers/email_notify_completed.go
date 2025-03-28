@@ -5,8 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/minhhoanq/ecommerce/common/logger"
-	"github.com/minhhoanq/ecommerce/notification_service/internal/dataaccess/database"
-	"github.com/minhhoanq/ecommerce/notification_service/internal/email"
+	"github.com/minhhoanq/ecommerce/notification_service/internal/service"
 )
 
 const (
@@ -23,24 +22,20 @@ type EmailNotifyCompletedMessageHandler interface {
 }
 
 type emailNotifyCompletedMessageHandler struct {
-	emailSender              email.EmailSender
-	notificationDataAccessor database.NotificationDataAccessor
-	l                        logger.Interface
+	notificationService service.NotificationService
+	l                   logger.Interface
 }
 
 func NewEmailNotifyCompletedMessageHandler(
-	emailSender email.EmailSender,
-	notificationDataAccessor database.NotificationDataAccessor,
+	notificationService service.NotificationService,
 	l logger.Interface,
 ) EmailNotifyCompletedMessageHandler {
 	return &emailNotifyCompletedMessageHandler{
-		emailSender:              emailSender,
-		notificationDataAccessor: notificationDataAccessor,
-		l:                        l,
+		notificationService: notificationService,
+		l:                   l,
 	}
 }
 
 func (e emailNotifyCompletedMessageHandler) Handle(ctx context.Context, message EmailNotifyCompleted) error {
-	// e.emailSender.SendMail()
-	return nil
+	return e.notificationService.SendEmailWhenSignup(ctx)
 }
