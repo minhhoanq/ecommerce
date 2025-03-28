@@ -28,5 +28,24 @@ func NewNotificationService(
 }
 
 func (n *notificationService) SendNotification(ctx context.Context, arg *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error) {
-	return nil, nil
+	payload := &database.SendNotificationRequest{
+		UserID:   arg.UserId,
+		Type:     arg.Type.String(),
+		Title:    arg.Title,
+		Message:  arg.Message,
+		Status:   arg.Status.String(),
+		Metadata: arg.Metadata,
+	}
+
+	notification, err := n.notificationDataAccessor.CreateNotification(ctx, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.SendNotificationResponse{
+		NotificationId: notification.ID,
+		Status:         notification.Status,
+	}
+
+	return response, nil
 }

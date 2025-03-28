@@ -21,6 +21,6 @@ func NewHandler(l logger.Interface, notificationService service.NotificationServ
 	}, nil
 }
 
-func (h *Handler) CreateOrder(ctx context.Context, arg *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error) {
+func (h *Handler) CreateNotification(ctx context.Context, arg *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error) {
 	return h.notificationService.SendNotification(ctx, arg)
 }

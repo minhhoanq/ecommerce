@@ -16,6 +16,7 @@ var collection *mongo.Collection
 
 type Database struct {
 	*mongo.Client
+	cfg config.Config
 }
 
 func New(cfg config.Config, l logger.Interface) (Database, error) {
@@ -44,7 +45,12 @@ func New(cfg config.Config, l logger.Interface) (Database, error) {
 
 	return Database{
 		Client: client,
+		cfg:    cfg,
 	}, nil
+}
+
+func (db Database) returnCollectionPointer(collection string) *mongo.Collection {
+	return db.Client.Database(db.cfg.DBName).Collection(collection)
 }
 
 func (db Database) Disconnect(ctx context.Context) error {

@@ -44,3 +44,8 @@ type SendNotificationRequest struct {
 	Status   string            `bson:"status" json:"status"`
 	Metadata map[string]string `bson:"metadata,omitempty" json:"metadata,omitempty"`
 }
+
+type SendNotificationResponse struct {
+	ID     string `bson:"_id,omitempty" json:"id"`
+	Status string `bson:"status" json:"status"`
+}

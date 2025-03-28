@@ -125,7 +125,8 @@ type SendNotificationRequest struct {
 	Type          NotificationType       `protobuf:"varint,2,opt,name=type,proto3,enum=notification_service.NotificationType" json:"type,omitempty"`
 	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
 	Message       string                 `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Status        NotificationStatus     `protobuf:"varint,5,opt,name=status,proto3,enum=notification_service.NotificationStatus" json:"status,omitempty"`
+	Metadata      map[string]string      `protobuf:"bytes,6,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -186,6 +187,13 @@ func (x *SendNotificationRequest) GetMessage() string {
 		return x.Message
 	}
 	return ""
+}
+
+func (x *SendNotificationRequest) GetStatus() NotificationStatus {
+	if x != nil {
+		return x.Status
+	}
+	return NotificationStatus_UNREAD
 }
 
 func (x *SendNotificationRequest) GetMetadata() map[string]string {
@@ -447,13 +455,14 @@ var File_notification_service_notification_service_proto protoreflect.FileDescri
 
 const file_notification_service_notification_service_proto_rawDesc = "" +
 	"\n" +
-	"/notification_service/notification_service.proto\x12\x14notification_service\"\xb4\x02\n" +
+	"/notification_service/notification_service.proto\x12\x14notification_service\"\xf6\x02\n" +
 	"\x17SendNotificationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12:\n" +
 	"\x04type\x18\x02 \x01(\x0e2&.notification_service.NotificationTypeR\x04type\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
-	"\amessage\x18\x04 \x01(\tR\amessage\x12W\n" +
-	"\bmetadata\x18\x05 \x03(\v2;.notification_service.SendNotificationRequest.MetadataEntryR\bmetadata\x1a;\n" +
+	"\amessage\x18\x04 \x01(\tR\amessage\x12@\n" +
+	"\x06status\x18\x05 \x01(\x0e2(.notification_service.NotificationStatusR\x06status\x12W\n" +
+	"\bmetadata\x18\x06 \x03(\v2;.notification_service.SendNotificationRequest.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"[\n" +
@@ -520,18 +529,19 @@ var file_notification_service_notification_service_proto_goTypes = []any{
 }
 var file_notification_service_notification_service_proto_depIdxs = []int32{
 	0, // 0: notification_service.SendNotificationRequest.type:type_name -> notification_service.NotificationType
-	7, // 1: notification_service.SendNotificationRequest.metadata:type_name -> notification_service.SendNotificationRequest.MetadataEntry
-	6, // 2: notification_service.GetUserNotificationsResponse.notifications:type_name -> notification_service.Notification
-	0, // 3: notification_service.Notification.type:type_name -> notification_service.NotificationType
-	1, // 4: notification_service.Notification.status:type_name -> notification_service.NotificationStatus
-	8, // 5: notification_service.Notification.metadata:type_name -> notification_service.Notification.MetadataEntry
-	2, // 6: notification_service.NotificationService.CreateNotification:input_type -> notification_service.SendNotificationRequest
-	3, // 7: notification_service.NotificationService.CreateNotification:output_type -> notification_service.SendNotificationResponse
-	7, // [7:8] is the sub-list for method output_type
-	6, // [6:7] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	1, // 1: notification_service.SendNotificationRequest.status:type_name -> notification_service.NotificationStatus
+	7, // 2: notification_service.SendNotificationRequest.metadata:type_name -> notification_service.SendNotificationRequest.MetadataEntry
+	6, // 3: notification_service.GetUserNotificationsResponse.notifications:type_name -> notification_service.Notification
+	0, // 4: notification_service.Notification.type:type_name -> notification_service.NotificationType
+	1, // 5: notification_service.Notification.status:type_name -> notification_service.NotificationStatus
+	8, // 6: notification_service.Notification.metadata:type_name -> notification_service.Notification.MetadataEntry
+	2, // 7: notification_service.NotificationService.CreateNotification:input_type -> notification_service.SendNotificationRequest
+	3, // 8: notification_service.NotificationService.CreateNotification:output_type -> notification_service.SendNotificationResponse
+	8, // [8:9] is the sub-list for method output_type
+	7, // [7:8] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_notification_service_notification_service_proto_init() }

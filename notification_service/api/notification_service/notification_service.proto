@@ -25,7 +25,8 @@ message SendNotificationRequest {
   NotificationType type = 2;
   string title = 3;
   string message = 4;
-  map<string, string> metadata = 5;
+  NotificationStatus status = 5;
+  map<string, string> metadata = 6;
 }
 
 message SendNotificationResponse {

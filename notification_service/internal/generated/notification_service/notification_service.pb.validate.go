@@ -65,6 +65,8 @@ func (m *SendNotificationRequest) validate(all bool) error {
 
 	// no validation rules for Message
 
+	// no validation rules for Status
+
 	// no validation rules for Metadata
 
 	if len(errors) > 0 {

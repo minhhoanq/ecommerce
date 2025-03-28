@@ -50,6 +50,16 @@
     }
   },
   "definitions": {
+    "notification_serviceNotificationStatus": {
+      "type": "string",
+      "enum": [
+        "UNREAD",
+        "READ",
+        "SENT",
+        "FAILED"
+      ],
+      "default": "UNREAD"
+    },
     "notification_serviceNotificationType": {
       "type": "string",
       "enum": [
@@ -72,6 +82,9 @@
         },
         "message": {
           "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/notification_serviceNotificationStatus"
         },
         "metadata": {
           "type": "object",
