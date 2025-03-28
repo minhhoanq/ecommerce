@@ -1,4 +1,5 @@
-docker-compose-dev:
-	docker compose -f docker-compose.dev.yaml up
+up-dev:
+	@echo "starting containers..."
+	docker compose -f docker-compose.dev.yaml up --build --remove-orphans
 
-.PHONY: docker-compose-dev
+.PHONY: up-dev

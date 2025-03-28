@@ -6,10 +6,13 @@ import (
 
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/minhhoanq/ecommerce/notification_service/config"
+	"github.com/minhhoanq/ecommerce/notification_service/pkg/constants"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.uber.org/zap"
 )
+
+var collection *mongo.Collection
 
 type Database struct {
 	*mongo.Client
@@ -29,11 +32,21 @@ func New(cfg config.Config, l logger.Interface) (Database, error) {
 	err = client.Ping(context.Background(), nil)
 	if err != nil {
 		l.Fatal("cannot connection to mongodb: ", zap.Error(err))
+		return Database{}, err
 	}
 
 	l.Info("connection to mongodb successfully", zap.Int("port", cfg.DBPort), zap.String("name", cfg.DBName))
 
+	// Migrations
+	migrator := NewMigrator(client, l)
+	// migration collections if not exists
+	migrator.EnsureCollectionsAndIndexes(cfg.DBName, []string{constants.NOTIFICATION_COLLECTION})
+
 	return Database{
 		Client: client,
 	}, nil
+}
+
+func (db Database) Disconnect(ctx context.Context) error {
+	return db.Disconnect(ctx)
 }
