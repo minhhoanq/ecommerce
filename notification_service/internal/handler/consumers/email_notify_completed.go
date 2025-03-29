@@ -13,8 +13,11 @@ const (
 )
 
 type EmailNotifyCompleted struct {
-	UserID uuid.UUID
-	Type   string
+	UserID        uuid.UUID
+	Email         string
+	Username      string
+	SecretCode    string
+	VerifyEmailID int
 }
 
 type EmailNotifyCompletedMessageHandler interface {
@@ -37,5 +40,12 @@ func NewEmailNotifyCompletedMessageHandler(
 }
 
 func (e emailNotifyCompletedMessageHandler) Handle(ctx context.Context, message EmailNotifyCompleted) error {
-	return e.notificationService.SendEmailWhenSignup(ctx)
+	arg := &service.SendEmailWhenSignupRequest{
+		UserID:        message.UserID,
+		Email:         message.Email,
+		Username:      message.Username,
+		SecretCode:    message.SecretCode,
+		VerifyEmailID: message.VerifyEmailID,
+	}
+	return e.notificationService.SendEmailWhenSignup(ctx, arg)
 }

@@ -13,9 +13,17 @@ type CreateUserParams struct {
 	RoleId   int    `json:"role_id"`
 }
 
+type UserCreatedParams struct {
+	UserID        uuid.UUID
+	Email         string
+	Username      string
+	SecretCode    string
+	VerifyEmailID int
+}
+
 type CreateUserTxParams struct {
 	CreateUserParams
-	AfterCreate func(user *User) error
+	AfterCreate func(params *UserCreatedParams) error
 }
 
 type CreateUserTxResult struct {

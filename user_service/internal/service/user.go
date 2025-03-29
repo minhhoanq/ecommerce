@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/hibiken/asynq"
 	"github.com/lib/pq"
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/minhhoanq/ecommerce/user_service/config"
 	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/kafka/producer"
 	"github.com/minhhoanq/ecommerce/user_service/internal/token"
 	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 	"github.com/minhhoanq/ecommerce/user_service/internal/worker"
@@ -27,24 +27,28 @@ type UserService interface {
 }
 
 type userService struct {
-	tokenMaker       token.Maker
-	cfg              config.Config
-	l                logger.Interface
-	userDataAccessor database.UserDataAccessor
-	taskDistributor  worker.TaskDistributor
+	tokenMaker               token.Maker
+	cfg                      config.Config
+	l                        logger.Interface
+	userDataAccessor         database.UserDataAccessor
+	taskDistributor          worker.TaskDistributor
+	userCreatedKafkaProducer producer.UserCreatedProducer
 }
 
 func NewUserService(tokenMaker token.Maker,
 	cfg config.Config,
 	l logger.Interface,
 	userDataccessor database.UserDataAccessor,
-	taskDistributor worker.TaskDistributor) UserService {
+	taskDistributor worker.TaskDistributor,
+	userCreatedKafkaProducer producer.UserCreatedProducer,
+) UserService {
 	return &userService{
-		tokenMaker:       tokenMaker,
-		cfg:              cfg,
-		l:                l,
-		userDataAccessor: userDataccessor,
-		taskDistributor:  taskDistributor,
+		tokenMaker:               tokenMaker,
+		cfg:                      cfg,
+		l:                        l,
+		userDataAccessor:         userDataccessor,
+		taskDistributor:          taskDistributor,
+		userCreatedKafkaProducer: userCreatedKafkaProducer,
 	}
 }
 
@@ -77,15 +81,16 @@ func (us *userService) CreateUser(ctx context.Context, arg CreateUserParams) (*d
 			Password: hashedPassword,
 			RoleId:   arg.RoleId,
 		},
-		AfterCreate: func(user *database.User) error {
-			taskPayload := &worker.PayloadSendVerifyEmail{UserId: user.ID}
-
-			opts := []asynq.Option{
-				asynq.MaxRetry(10),
-				asynq.Queue(worker.QueueCritial),
+		AfterCreate: func(params *database.UserCreatedParams) error {
+			message := producer.UserCreated{
+				UserID:        params.UserID,
+				Email:         params.Email,
+				Username:      params.Username,
+				SecretCode:    params.SecretCode,
+				VerifyEmailID: params.VerifyEmailID,
 			}
 
-			return us.taskDistributor.DistributeTaskSendVerifyEmail(ctx, taskPayload, opts...)
+			return us.userCreatedKafkaProducer.Produce(ctx, message)
 		},
 	}
 

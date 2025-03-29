@@ -42,4 +42,7 @@ mockdb:
 mockwk:
 	mockgen -package mockwk -destination internal/worker/mock/distributor.go github.com/minhhoanq/ecommerce/user_service/internal/worker TaskDistributor
 
-.PHONY: proto build postgres createdb dropdb migrate-create migrateup migratedown redis server proto
+mockkp:
+	mockgen -package mockkp -destination internal/dataaccess/kafka/producer/mock/user_created.go github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/kafka/producer UserCreatedProducer
+
+.PHONY: proto build postgres createdb dropdb migrate-create migrateup migratedown redis server proto mockdb mockwk mockkp

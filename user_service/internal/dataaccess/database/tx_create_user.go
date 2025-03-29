@@ -2,6 +2,8 @@ package database
 
 import (
 	"context"
+
+	"github.com/minhhoanq/ecommerce/user_service/internal/util"
 )
 
 func (q *userDataAccessor) CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error) {
@@ -18,7 +20,26 @@ func (q *userDataAccessor) CreateUserTx(ctx context.Context, arg CreateUserTxPar
 
 		result.User = *user
 
-		return arg.AfterCreate(&result.User)
+		payloadVerifyEmail := CreateVerifyEmailParams{
+			UserId:     user.ID,
+			Email:      user.Email,
+			SecretCode: util.RandomString(32),
+		}
+
+		verifyEmail, err := q.CreateVerifyEmail(ctx, payloadVerifyEmail)
+		if err != nil {
+			return err
+		}
+
+		message := UserCreatedParams{
+			UserID:        user.ID,
+			Email:         user.Email,
+			Username:      user.Username,
+			SecretCode:    verifyEmail.SecretCode,
+			VerifyEmailID: verifyEmail.ID,
+		}
+
+		return arg.AfterCreate(&message)
 	})
 
 	return result, err

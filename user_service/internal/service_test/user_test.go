@@ -10,6 +10,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/database"
+	mockkp "github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/kafka/producer/mock"
 	mockdb "github.com/minhhoanq/ecommerce/user_service/internal/dataaccess/mock"
 	"github.com/minhhoanq/ecommerce/user_service/internal/service"
 	"github.com/minhhoanq/ecommerce/user_service/internal/util"
@@ -40,7 +41,14 @@ func (expected eqCreateUserTxParamsMatcher) Matches(x interface{}) bool {
 		return false
 	}
 
-	err = actualArg.AfterCreate(&expected.user)
+	params := database.UserCreatedParams{
+		UserID:   expected.user.ID,
+		Email:    expected.user.Email,
+		Username: expected.user.Username,
+		// SecretCode: expected,
+	}
+
+	err = actualArg.AfterCreate(&params)
 
 	return err == nil
 }
@@ -101,7 +109,7 @@ func TestGetUserByID(t *testing.T) {
 			store := mockdb.NewMockUserDataAccessor(mockCtrl)
 
 			tc.buildStubs(store)
-			service := newTestServer(t, store, nil)
+			service := newTestServer(t, store, nil, nil)
 			res, err := service.GetUserByID(context.Background(), tc.body)
 			tc.checkResponse(t, res, err)
 		})
@@ -168,8 +176,12 @@ func TestCreateUser(t *testing.T) {
 			defer taskCtrl.Finish()
 			taskDistributor := mockwk.NewMockTaskDistributor(taskCtrl)
 
+			kafkaProducerCtrl := gomock.NewController(t)
+			defer kafkaProducerCtrl.Finish()
+			userCreatedKafkaProducer := mockkp.NewMockUserCreatedProducer(kafkaProducerCtrl)
+
 			tc.buildStubs(store, taskDistributor)
-			service := newTestServer(t, store, taskDistributor)
+			service := newTestServer(t, store, taskDistributor, userCreatedKafkaProducer)
 			res, err := service.CreateUser(context.Background(), tc.body)
 
 			tc.checkResponse(t, res, err)
