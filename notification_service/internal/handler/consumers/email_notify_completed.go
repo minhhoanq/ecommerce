@@ -10,6 +10,7 @@ import (
 
 const (
 	TOPIC_NAME_NOTIFICATION_SERVICE_EMAIL_NOTIFY_COMPLETED = "notification_service_email_notify_completed"
+	TOPIC_NAME_USER_SERVICE_USER_CREATED                   = "user_service_user_created"
 )
 
 type EmailNotifyCompleted struct {

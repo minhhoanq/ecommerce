@@ -26,14 +26,15 @@ func NewNotificaitonServiceKafkaConsumer(
 	emailNotifyCompleted EmailNotifyCompletedMessageHandler,
 ) NotificationServiceKafkaConsumer {
 	return &notificationServiceKafkaConsumer{
-		kafkaConsumer: kafkaConsumer,
-		l:             l,
+		kafkaConsumer:        kafkaConsumer,
+		l:                    l,
+		emailNotifyCompleted: emailNotifyCompleted,
 	}
 }
 
 func (n notificationServiceKafkaConsumer) Start(ctx context.Context) error {
 	n.kafkaConsumer.RegisterHandler(
-		TOPIC_NAME_NOTIFICATION_SERVICE_EMAIL_NOTIFY_COMPLETED,
+		TOPIC_NAME_USER_SERVICE_USER_CREATED,
 		func(ctx context.Context, topic string, message []byte) error {
 			var payload EmailNotifyCompleted
 			if err := json.Unmarshal(message, &payload); err != nil {
@@ -41,10 +42,9 @@ func (n notificationServiceKafkaConsumer) Start(ctx context.Context) error {
 				return fmt.Errorf("failed to unmarshal message", err)
 			}
 
-			n.emailNotifyCompleted.Handle(ctx, payload)
-			return nil
+			return n.emailNotifyCompleted.Handle(ctx, payload)
 		},
 	)
 
-	return n.Start(ctx)
+	return n.kafkaConsumer.Start(ctx)
 }

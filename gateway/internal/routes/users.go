@@ -32,12 +32,12 @@ func newUserRouter(handler *echo.Group, l logger.Interface, userManagementOperat
 func (userHandler *userHandlerFunc) signup(c echo.Context) error {
 	var req user_service.SignupRequest
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	user, err := userHandler.userManagementOperator.Signup(c.Request().Context(), &req)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusCreated, user)
