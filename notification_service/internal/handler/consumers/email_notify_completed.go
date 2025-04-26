@@ -48,5 +48,5 @@ func (e emailNotifyCompletedMessageHandler) Handle(ctx context.Context, message 
 		SecretCode:    message.SecretCode,
 		VerifyEmailID: message.VerifyEmailID,
 	}
-	return e.notificationService.SendEmailWhenSignup(ctx, arg)
+	return e.notificationService.SendEmailWhenSignup(ctx, arg, "email")
 }

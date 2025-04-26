@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/catalog.CatalogService/AddToCartItem": {
+    "/catalog_service.CatalogService/AddToCartItem": {
       "post": {
         "operationId": "CatalogService_AddToCartItem",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogAddToCartItemResponse"
+              "$ref": "#/definitions/catalog_serviceAddToCartItemResponse"
             }
           },
           "default": {
@@ -39,7 +39,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogAddToCartItemRequest"
+              "$ref": "#/definitions/catalog_serviceAddToCartItemRequest"
             }
           }
         ],
@@ -48,14 +48,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/CreateCart": {
+    "/catalog_service.CatalogService/CreateCart": {
       "post": {
         "operationId": "CatalogService_CreateCart",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogCreateCartResponse"
+              "$ref": "#/definitions/catalog_serviceCreateCartResponse"
             }
           },
           "default": {
@@ -71,7 +71,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogCreateCartRequest"
+              "$ref": "#/definitions/catalog_serviceCreateCartRequest"
             }
           }
         ],
@@ -80,14 +80,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/CreateProduct": {
+    "/catalog_service.CatalogService/CreateProduct": {
       "post": {
         "operationId": "CatalogService_CreateProduct",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogCreateProductResponse"
+              "$ref": "#/definitions/catalog_serviceCreateProductResponse"
             }
           },
           "default": {
@@ -103,7 +103,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogCreateProductRequest"
+              "$ref": "#/definitions/catalog_serviceCreateProductWithImageRequest"
             }
           }
         ],
@@ -112,14 +112,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/GetInventorySKU": {
+    "/catalog_service.CatalogService/GetInventorySKU": {
       "post": {
         "operationId": "CatalogService_GetInventorySKU",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogGetInventorySKUResponse"
+              "$ref": "#/definitions/catalog_serviceGetInventorySKUResponse"
             }
           },
           "default": {
@@ -135,7 +135,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogGetInventorySKURequest"
+              "$ref": "#/definitions/catalog_serviceGetInventorySKURequest"
             }
           }
         ],
@@ -144,14 +144,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/GetSKU": {
+    "/catalog_service.CatalogService/GetSKU": {
       "post": {
         "operationId": "CatalogService_GetSKU",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogGetSKUResponse"
+              "$ref": "#/definitions/catalog_serviceGetSKUResponse"
             }
           },
           "default": {
@@ -167,7 +167,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogGetSKURequest"
+              "$ref": "#/definitions/catalog_serviceGetSKURequest"
             }
           }
         ],
@@ -176,14 +176,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/ListProduct": {
+    "/catalog_service.CatalogService/ListProduct": {
       "post": {
         "operationId": "CatalogService_ListProduct",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogListProductResponse"
+              "$ref": "#/definitions/catalog_serviceListProductResponse"
             }
           },
           "default": {
@@ -199,7 +199,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogListProductRequest"
+              "$ref": "#/definitions/catalog_serviceListProductRequest"
             }
           }
         ],
@@ -208,14 +208,14 @@
         ]
       }
     },
-    "/catalog.CatalogService/UpdateInventorySKU": {
+    "/catalog_service.CatalogService/UpdateInventorySKU": {
       "post": {
         "operationId": "CatalogService_UpdateInventorySKU",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/catalogUpdateInventorySKUResponse"
+              "$ref": "#/definitions/catalog_serviceUpdateInventorySKUResponse"
             }
           },
           "default": {
@@ -231,7 +231,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/catalogUpdateInventorySKURequest"
+              "$ref": "#/definitions/catalog_serviceUpdateInventorySKURequest"
             }
           }
         ],
@@ -242,15 +242,15 @@
     }
   },
   "definitions": {
-    "catalogAddToCartItemRequest": {
+    "catalog_serviceAddToCartItemRequest": {
       "type": "object",
       "properties": {
         "item": {
-          "$ref": "#/definitions/catalogCartItem"
+          "$ref": "#/definitions/catalog_serviceCartItem"
         }
       }
     },
-    "catalogAddToCartItemResponse": {
+    "catalog_serviceAddToCartItemResponse": {
       "type": "object",
       "properties": {
         "cartId": {
@@ -260,12 +260,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogCartItem"
+            "$ref": "#/definitions/catalog_serviceCartItem"
           }
         }
       }
     },
-    "catalogAttributeValue": {
+    "catalog_serviceAttributeValue": {
       "type": "object",
       "properties": {
         "attributeId": {
@@ -278,7 +278,7 @@
       },
       "title": "Attribute value pair"
     },
-    "catalogCartItem": {
+    "catalog_serviceCartItem": {
       "type": "object",
       "properties": {
         "id": {
@@ -296,7 +296,7 @@
         }
       }
     },
-    "catalogCreateCartRequest": {
+    "catalog_serviceCreateCartRequest": {
       "type": "object",
       "properties": {
         "userId": {
@@ -304,7 +304,7 @@
         }
       }
     },
-    "catalogCreateCartResponse": {
+    "catalog_serviceCreateCartResponse": {
       "type": "object",
       "properties": {
         "cartId": {
@@ -315,7 +315,7 @@
         }
       }
     },
-    "catalogCreateProductRequest": {
+    "catalog_serviceCreateProductRequest": {
       "type": "object",
       "properties": {
         "name": {
@@ -326,7 +326,7 @@
           "type": "string"
         },
         "image": {
-          "type": "string"
+          "$ref": "#/definitions/catalog_serviceImageInfo"
         },
         "categoryId": {
           "type": "integer",
@@ -340,24 +340,35 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogSKUToCreate"
+            "$ref": "#/definitions/catalog_serviceSKUToCreate"
           },
           "title": "SKUs associated with the product"
         }
-      },
-      "title": "------------------ Request and Response Messages ------------------\nRequest message for creating a new product with SKUs"
+      }
     },
-    "catalogCreateProductResponse": {
+    "catalog_serviceCreateProductResponse": {
       "type": "object",
       "properties": {
         "product": {
-          "$ref": "#/definitions/catalogProductWithSKUs",
+          "$ref": "#/definitions/catalog_serviceProductWithSKUs",
           "title": "Created product information"
         }
       },
       "title": "Response message for product creation"
     },
-    "catalogGetInventorySKURequest": {
+    "catalog_serviceCreateProductWithImageRequest": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/catalog_serviceCreateProductRequest"
+        },
+        "imageInfo": {
+          "$ref": "#/definitions/catalog_serviceImageInfo"
+        }
+      },
+      "title": "------------------ Request and Response Messages ------------------\nRequest message for creating a new product with SKUs"
+    },
+    "catalog_serviceGetInventorySKURequest": {
       "type": "object",
       "properties": {
         "skuId": {
@@ -365,15 +376,15 @@
         }
       }
     },
-    "catalogGetInventorySKUResponse": {
+    "catalog_serviceGetInventorySKUResponse": {
       "type": "object",
       "properties": {
         "inventory": {
-          "$ref": "#/definitions/catalogInventory"
+          "$ref": "#/definitions/catalog_serviceInventory"
         }
       }
     },
-    "catalogGetSKURequest": {
+    "catalog_serviceGetSKURequest": {
       "type": "object",
       "properties": {
         "skuId": {
@@ -381,15 +392,27 @@
         }
       }
     },
-    "catalogGetSKUResponse": {
+    "catalog_serviceGetSKUResponse": {
       "type": "object",
       "properties": {
         "sku": {
-          "$ref": "#/definitions/catalogSKU"
+          "$ref": "#/definitions/catalog_serviceSKU"
         }
       }
     },
-    "catalogInventory": {
+    "catalog_serviceImageInfo": {
+      "type": "object",
+      "properties": {
+        "originalFileName": {
+          "type": "string"
+        },
+        "imageData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "catalog_serviceInventory": {
       "type": "object",
       "properties": {
         "id": {
@@ -410,7 +433,7 @@
       },
       "title": "Inventory entity"
     },
-    "catalogListProductRequest": {
+    "catalog_serviceListProductRequest": {
       "type": "object",
       "properties": {
         "page": {
@@ -423,19 +446,19 @@
         }
       }
     },
-    "catalogListProductResponse": {
+    "catalog_serviceListProductResponse": {
       "type": "object",
       "properties": {
         "products": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogProductWithSKUs"
+            "$ref": "#/definitions/catalog_serviceProductWithSKUs"
           }
         }
       }
     },
-    "catalogPrice": {
+    "catalog_servicePrice": {
       "type": "object",
       "properties": {
         "id": {
@@ -459,7 +482,7 @@
       },
       "title": "Price entity"
     },
-    "catalogProduct": {
+    "catalog_serviceProduct": {
       "type": "object",
       "properties": {
         "id": {
@@ -493,22 +516,22 @@
       },
       "title": "Product entity"
     },
-    "catalogProductWithSKUs": {
+    "catalog_serviceProductWithSKUs": {
       "type": "object",
       "properties": {
         "product": {
-          "$ref": "#/definitions/catalogProduct"
+          "$ref": "#/definitions/catalog_serviceProduct"
         },
         "skus": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogSKU"
+            "$ref": "#/definitions/catalog_serviceSKU"
           }
         }
       }
     },
-    "catalogSKU": {
+    "catalog_serviceSKU": {
       "type": "object",
       "properties": {
         "id": {
@@ -527,14 +550,14 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogAttributeValue"
+            "$ref": "#/definitions/catalog_serviceAttributeValue"
           }
         },
         "currentPrice": {
-          "$ref": "#/definitions/catalogPrice"
+          "$ref": "#/definitions/catalog_servicePrice"
         },
         "inventory": {
-          "$ref": "#/definitions/catalogInventory"
+          "$ref": "#/definitions/catalog_serviceInventory"
         },
         "createdAt": {
           "type": "string",
@@ -547,7 +570,7 @@
       },
       "title": "SKU entity"
     },
-    "catalogSKUToCreate": {
+    "catalog_serviceSKUToCreate": {
       "type": "object",
       "properties": {
         "name": {
@@ -568,13 +591,13 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/catalogAttributeValue"
+            "$ref": "#/definitions/catalog_serviceAttributeValue"
           }
         }
       },
       "title": "SKU creation information"
     },
-    "catalogUpdateInventorySKURequest": {
+    "catalog_serviceUpdateInventorySKURequest": {
       "type": "object",
       "properties": {
         "skuId": {
@@ -586,11 +609,11 @@
         }
       }
     },
-    "catalogUpdateInventorySKUResponse": {
+    "catalog_serviceUpdateInventorySKUResponse": {
       "type": "object",
       "properties": {
         "inventory": {
-          "$ref": "#/definitions/catalogInventory"
+          "$ref": "#/definitions/catalog_serviceInventory"
         }
       }
     },

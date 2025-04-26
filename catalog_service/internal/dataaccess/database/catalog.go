@@ -166,6 +166,7 @@ func (c *catalogDataAccessor) ListProducts(ctx context.Context, arg *ListProduct
 	var rawResult []byte
 
 	offset := (arg.Page - 1) * arg.PageSize
+	fmt.Println("page size", arg.PageSize)
 
 	query := `
 		WITH limited_products AS (

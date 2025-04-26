@@ -10,6 +10,7 @@ import (
 
 type CatalogManagementOperator interface {
 	CreateProduct(ctx context.Context, arg *catalog_service.CreateProductWithImageRequest) (*catalog_service.CreateProductResponse, error)
+	GetListProduct(ctx context.Context, arg *catalog_service.ListProductRequest) (*catalog_service.ListProductResponse, error)
 }
 
 type catalogManagementOperator struct {
@@ -35,4 +36,13 @@ func (c *catalogManagementOperator) CreateProduct(ctx context.Context, arg *cata
 	}
 
 	return product, nil
+}
+
+func (c *catalogManagementOperator) GetListProduct(ctx context.Context, arg *catalog_service.ListProductRequest) (*catalog_service.ListProductResponse, error) {
+	products, err := c.catalogServiceClient.ListProduct(ctx, arg)
+	if err != nil {
+		c.l.Error("module.GetListProduct failed to list product", zap.Error(err))
+		return nil, err
+	}
+	return products, nil
 }

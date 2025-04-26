@@ -12,30 +12,38 @@ import (
 	"github.com/minhhoanq/ecommerce/notification_service/internal/generated/user_service"
 )
 
+const path = "http://localhost:8000/v1/verify_email"
+
 type NotificationService interface {
 	SendNotification(ctx context.Context, arg *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error)
-	SendEmailWhenSignup(ctx context.Context, arg *SendEmailWhenSignupRequest) error
+	SendEmailWhenSignup(ctx context.Context, arg *SendEmailWhenSignupRequest, notiType NotificationType) error
 }
 
 type notificationService struct {
 	l                        logger.Interface
 	notificationDataAccessor database.NotificationDataAccessor
-	emailSender              email.EmailSender
 	userServiceGRPCClient    user_service.UserServiceClient
+	notifier                 Notifier
+	emailSender              email.EmailSender
 }
 
 func NewNotificationService(
 	l logger.Interface,
 	notificationDataAccessor database.NotificationDataAccessor,
-	emailSender email.EmailSender,
 	userServiceGRPCClient user_service.UserServiceClient,
+	emailSender email.EmailSender,
 ) NotificationService {
+
 	return &notificationService{
 		l:                        l,
 		notificationDataAccessor: notificationDataAccessor,
-		emailSender:              emailSender,
 		userServiceGRPCClient:    userServiceGRPCClient,
+		emailSender:              emailSender,
 	}
+}
+
+func (n *notificationService) setNotifier(notifier Notifier) {
+	n.notifier = notifier
 }
 
 func (n *notificationService) SendNotification(ctx context.Context, arg *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error) {
@@ -69,10 +77,9 @@ type SendEmailWhenSignupRequest struct {
 	VerifyEmailID int
 }
 
-func (n *notificationService) SendEmailWhenSignup(ctx context.Context, arg *SendEmailWhenSignupRequest) error {
-
+func (n *notificationService) SendEmailWhenSignup(ctx context.Context, arg *SendEmailWhenSignupRequest, notiType NotificationType) error {
 	subject := "Welcome to LIFEAT"
-	verifyUrl := fmt.Sprintf("http://localhost:8000/v1/verify_email?email_id=%d&secret_code=%s", arg.VerifyEmailID, arg.SecretCode)
+	verifyUrl := fmt.Sprintf("%s?email_id=%d&secret_code=%s", path, arg.VerifyEmailID, arg.SecretCode)
 	content := fmt.Sprintf(`Hello %s, <br/>
 	Thank you for registering with us!<br/>
 	Please <a href="%s">Click here<a> to verify your email address.<br/>`, arg.Username, verifyUrl)
@@ -93,7 +100,20 @@ func (n *notificationService) SendEmailWhenSignup(ctx context.Context, arg *Send
 		return err
 	}
 
-	n.emailSender.SendMail(subject, content, to, nil, nil, nil)
+	n.setNotifier(&EmailNotifier{emailSender: n.emailSender})
+	if err != nil {
+		return err
+	}
 
-	return nil
+	notiParams := &NotifierParams{
+		notiType:    notiType,
+		subject:     subject,
+		content:     content,
+		to:          to,
+		cc:          nil,
+		bcc:         nil,
+		attachFiles: nil,
+	}
+
+	return n.notifier.Send(ctx, notiParams)
 }

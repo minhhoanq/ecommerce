@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CatalogService_CreateProduct_FullMethodName      = "/catalog.CatalogService/CreateProduct"
-	CatalogService_ListProduct_FullMethodName        = "/catalog.CatalogService/ListProduct"
-	CatalogService_CreateCart_FullMethodName         = "/catalog.CatalogService/CreateCart"
-	CatalogService_AddToCartItem_FullMethodName      = "/catalog.CatalogService/AddToCartItem"
-	CatalogService_GetSKU_FullMethodName             = "/catalog.CatalogService/GetSKU"
-	CatalogService_GetInventorySKU_FullMethodName    = "/catalog.CatalogService/GetInventorySKU"
-	CatalogService_UpdateInventorySKU_FullMethodName = "/catalog.CatalogService/UpdateInventorySKU"
+	CatalogService_CreateProduct_FullMethodName      = "/catalog_service.CatalogService/CreateProduct"
+	CatalogService_ListProduct_FullMethodName        = "/catalog_service.CatalogService/ListProduct"
+	CatalogService_CreateCart_FullMethodName         = "/catalog_service.CatalogService/CreateCart"
+	CatalogService_AddToCartItem_FullMethodName      = "/catalog_service.CatalogService/AddToCartItem"
+	CatalogService_GetSKU_FullMethodName             = "/catalog_service.CatalogService/GetSKU"
+	CatalogService_GetInventorySKU_FullMethodName    = "/catalog_service.CatalogService/GetInventorySKU"
+	CatalogService_UpdateInventorySKU_FullMethodName = "/catalog_service.CatalogService/UpdateInventorySKU"
 )
 
 // CatalogServiceClient is the client API for CatalogService service.
@@ -34,7 +34,7 @@ const (
 //
 // Product service definition
 type CatalogServiceClient interface {
-	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	CreateProduct(ctx context.Context, in *CreateProductWithImageRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 	ListProduct(ctx context.Context, in *ListProductRequest, opts ...grpc.CallOption) (*ListProductResponse, error)
 	CreateCart(ctx context.Context, in *CreateCartRequest, opts ...grpc.CallOption) (*CreateCartResponse, error)
 	AddToCartItem(ctx context.Context, in *AddToCartItemRequest, opts ...grpc.CallOption) (*AddToCartItemResponse, error)
@@ -51,7 +51,7 @@ func NewCatalogServiceClient(cc grpc.ClientConnInterface) CatalogServiceClient {
 	return &catalogServiceClient{cc}
 }
 
-func (c *catalogServiceClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
+func (c *catalogServiceClient) CreateProduct(ctx context.Context, in *CreateProductWithImageRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateProductResponse)
 	err := c.cc.Invoke(ctx, CatalogService_CreateProduct_FullMethodName, in, out, cOpts...)
@@ -127,7 +127,7 @@ func (c *catalogServiceClient) UpdateInventorySKU(ctx context.Context, in *Updat
 //
 // Product service definition
 type CatalogServiceServer interface {
-	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	CreateProduct(context.Context, *CreateProductWithImageRequest) (*CreateProductResponse, error)
 	ListProduct(context.Context, *ListProductRequest) (*ListProductResponse, error)
 	CreateCart(context.Context, *CreateCartRequest) (*CreateCartResponse, error)
 	AddToCartItem(context.Context, *AddToCartItemRequest) (*AddToCartItemResponse, error)
@@ -144,7 +144,7 @@ type CatalogServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCatalogServiceServer struct{}
 
-func (UnimplementedCatalogServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
+func (UnimplementedCatalogServiceServer) CreateProduct(context.Context, *CreateProductWithImageRequest) (*CreateProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
 }
 func (UnimplementedCatalogServiceServer) ListProduct(context.Context, *ListProductRequest) (*ListProductResponse, error) {
@@ -187,7 +187,7 @@ func RegisterCatalogServiceServer(s grpc.ServiceRegistrar, srv CatalogServiceSer
 }
 
 func _CatalogService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateProductRequest)
+	in := new(CreateProductWithImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func _CatalogService_CreateProduct_Handler(srv interface{}, ctx context.Context,
 		FullMethod: CatalogService_CreateProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).CreateProduct(ctx, req.(*CreateProductRequest))
+		return srv.(CatalogServiceServer).CreateProduct(ctx, req.(*CreateProductWithImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -316,7 +316,7 @@ func _CatalogService_UpdateInventorySKU_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CatalogService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "catalog.CatalogService",
+	ServiceName: "catalog_service.CatalogService",
 	HandlerType: (*CatalogServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

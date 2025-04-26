@@ -32,47 +32,49 @@ func newUserRouter(handler *echo.Group, l logger.Interface, userManagementOperat
 func (userHandler *userHandlerFunc) signup(c echo.Context) error {
 	var req user_service.SignupRequest
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return Error(c, err, http.StatusBadRequest)
 	}
 
 	user, err := userHandler.userManagementOperator.Signup(c.Request().Context(), &req)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return Error(c, err, http.StatusBadRequest)
 	}
 
-	return c.JSON(http.StatusCreated, user)
+	return Success(c, user, http.StatusCreated, nil)
 }
 
 func (userHandler *userHandlerFunc) signin(c echo.Context) error {
 	var req user_service.SigninRequest
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return Error(c, err, http.StatusBadRequest)
 	}
 
 	user, err := userHandler.userManagementOperator.Signin(c.Request().Context(), &req)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return Error(c, err, http.StatusBadRequest)
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return Success(c, user, http.StatusOK, nil)
 }
 
 func (userHanlder *userHandlerFunc) getUser(c echo.Context) error {
 	var req user_service.GetUserRequest
-	req.Id = c.Param("id")
-
-	user, err := userHanlder.userManagementOperator.GetUser(c.Request().Context(), &req)
-
+	id, err := parsePathParam(c, "id")
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, err)
-		}
-
-		return c.JSON(http.StatusBadRequest, err)
+		return Error(c, err, http.StatusBadRequest)
 	}
 
-	userHanlder.l.Info("get user")
-	userHanlder.l.Info("get user", logger.String("user", user.String()))
+	if id != "" {
+		req.Id = id
+	}
+	user, err := userHanlder.userManagementOperator.GetUser(c.Request().Context(), &req)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return Error(c, err, http.StatusNotFound)
+		}
 
-	return c.JSON(http.StatusOK, &user)
+		return Error(c, err, http.StatusBadRequest)
+
+	}
+	return Success(c, user, http.StatusOK, nil)
 }

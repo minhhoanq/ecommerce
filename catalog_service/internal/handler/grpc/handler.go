@@ -8,6 +8,7 @@ import (
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/service"
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 type Handler struct {
@@ -51,6 +52,7 @@ func (h *Handler) ListProduct(ctx context.Context, arg *pb.ListProductRequest) (
 	// 	return products, nil
 	// }
 	// get products from database
+	h.l.Info("cataog.handler.ListProduct", zap.Int32("page_size", arg.PageSize))
 	products, err := h.catalogService.ListProduct(ctx, arg)
 	// jsonProducts, err := json.Marshal(products)
 	// if err != nil {
@@ -84,6 +86,7 @@ func (h *Handler) AddToCartItem(ctx context.Context, arg *pb.AddToCartItemReques
 }
 
 func (h *Handler) GetSKU(ctx context.Context, arg *pb.GetSKURequest) (*pb.GetSKUResponse, error) {
+	fmt.Println("get sku id")
 	return h.catalogService.GetSKU(ctx, arg)
 }
 

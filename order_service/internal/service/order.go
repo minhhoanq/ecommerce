@@ -45,12 +45,15 @@ func (o *orderService) CreateOrder(ctx context.Context, arg *pb.CreateOrderReque
 		Status:     "PENDING",
 		OrderItems: make([]database.CreateOrderItemRequest, 0, len(arg.CartItems)),
 	}
+
 	for _, item := range arg.CartItems {
+		fmt.Println("item: ", item.SkuId)
 		sku, err := o.catalogServiceClient.GetSKU(ctx, &catalog_service.GetSKURequest{
 			SkuId: item.SkuId,
 		})
+		fmt.Println(sku)
 		if err != nil {
-			return nil, fmt.Errorf("failed to find sku", err)
+			return nil, fmt.Errorf("failed to find sku", err.Error())
 		}
 
 		if sku.Sku.Id == "" || sku.Sku == nil {

@@ -33,8 +33,10 @@ func Initial(cfg config.Config, l logger.Interface) (grpc.Server, error) {
 	// EmailSender
 	emailSender := email.NewGmailSender(cfg.EmailSenderName, cfg.EmailSenderAddress, cfg.EmailSenderPassword)
 
-	notificationService := service.NewNotificationService(l, notificationDataAccessor, emailSender, userServiceClient)
+	// notifier factory
+	// notifierFactory := service.NewNotifierFactory(emailSender)
 
+	notificationService := service.NewNotificationService(l, notificationDataAccessor, userServiceClient, emailSender)
 	handler, err := grpc.NewHandler(l, notificationService)
 	if err != nil {
 		return nil, err

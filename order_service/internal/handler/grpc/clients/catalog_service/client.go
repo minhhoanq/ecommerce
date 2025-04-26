@@ -19,6 +19,7 @@ func NewClient(cfg config.Config, l logger.Interface) (catalog_service.CatalogSe
 	}
 
 	client := catalog_service.NewCatalogServiceClient(conn)
+	l.Info("connect catalog grpc client successfully", zap.String("target: ", conn.Target()))
 
 	return client, nil
 }

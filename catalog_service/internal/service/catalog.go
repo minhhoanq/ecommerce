@@ -116,16 +116,16 @@ func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProduc
 	c.l.Info("Create product in service")
 	// c.l.Info("Create product in service: ", zap.Any("ac", arg.GetImageInfo().GetImageData()))
 
-	err := c.s3Client.UploadFile(ctx, arg.GetImageInfo().OriginalFileName, arg.GetImageInfo().GetImageData())
-	if err != nil {
-		return nil, fmt.Errorf("failed to upload image to cloud: ", err)
-	}
+	// err := c.s3Client.UploadFile(ctx, arg.GetImageInfo().OriginalFileName, arg.GetImageInfo().GetImageData())
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to upload image to cloud: ", err)
+	// }
 
 	// Transform protobuf request to database parameters
 	dbParams := &database.CreateProductParams{
 		Name:        arg.GetMetadata().Name,
 		Description: arg.GetMetadata().Description,
-		Image:       "",
+		Image:       arg.ImageInfo.OriginalFileName,
 		CategoryID:  arg.GetMetadata().CategoryId,
 		BrandID:     arg.GetMetadata().BrandId,
 		SKUs:        make([]database.CreateSKUParams, 0, len(arg.GetMetadata().Skus)),
@@ -177,6 +177,7 @@ func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProduc
 }
 
 func (c *catalogService) ListProduct(ctx context.Context, arg *pb.ListProductRequest) (*pb.ListProductResponse, error) {
+	fmt.Println(arg.GetPageSize())
 	products, err := c.catalogAccessor.ListProducts(ctx, &database.ListProductRequest{
 		Page:     arg.GetPage(),
 		PageSize: arg.GetPageSize(),
@@ -267,6 +268,7 @@ func (c *catalogService) AddToCartItem(ctx context.Context, arg *pb.AddToCartIte
 }
 
 func (c *catalogService) GetSKU(ctx context.Context, arg *pb.GetSKURequest) (*pb.GetSKUResponse, error) {
+	fmt.Println("catalog: ")
 	skuID, err := uuid.Parse(arg.SkuId)
 	if err != nil {
 		return nil, err

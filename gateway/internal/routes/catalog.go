@@ -2,7 +2,6 @@ package routes
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,7 +10,6 @@ import (
 	"github.com/minhhoanq/ecommerce/common/logger"
 	"github.com/minhhoanq/ecommerce/gateway/internal/generated/catalog_service"
 	"github.com/minhhoanq/ecommerce/gateway/internal/modules/catalog"
-	"go.uber.org/zap"
 )
 
 type catalogHandlerFunc struct {
@@ -26,6 +24,7 @@ func newCatalogRouter(handler *echo.Group, l logger.Interface, catalogManagemntO
 	}
 
 	handler.POST("", c.createProduct)
+	handler.GET("", c.getListProduct)
 }
 
 type CreateProductParams struct {
@@ -51,31 +50,29 @@ type CreateAttributeParams struct {
 }
 
 func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
-
-	metadataJson := c.FormValue("metadata")
-	var req CreateProductParams
-	if err := json.Unmarshal([]byte(metadataJson), &req); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+	catalogHandler.l.Info("routes.catalog.createProduct create product")
+	req := new(CreateProductParams)
+	if err := parseJSONFormField(c, "dawd", req); err != nil {
+		return Error(c, err, http.StatusBadRequest)
 	}
 
+	catalogHandler.l.Info("routes.catalog.createProduct create product 1")
 	image, err := c.FormFile("image")
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return Error(c, err, http.StatusBadRequest)
 	}
+	catalogHandler.l.Info("routes.catalog.createProduct create product 2")
 
 	file, err := image.Open()
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return Error(c, err, http.StatusBadRequest)
 	}
 	defer file.Close()
 
 	buf := new(bytes.Buffer)
 	if _, err := io.Copy(buf, file); err != nil {
-		return fmt.Errorf("failed to copy buffer file image")
+		return Error(c, fmt.Errorf("failed to copy buffer file image err: %w", err), http.StatusBadRequest)
 	}
-
-	catalogHandler.l.Info("order params: ", zap.String("order: ", req.Name))
-	catalogHandler.l.Info("order params: ", zap.String("iamge: ", image.Filename))
 
 	metadata := &catalog_service.CreateProductRequest{
 		Name:        req.Name,
@@ -116,8 +113,30 @@ func (catalogHandler *catalogHandlerFunc) createProduct(c echo.Context) error {
 
 	product, err := catalogHandler.catalogManagementOperator.CreateProduct(c.Request().Context(), arg)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return Error(c, err, http.StatusBadRequest)
 	}
 
-	return c.JSON(http.StatusCreated, product)
+	return Success(c, product, http.StatusCreated, nil)
+}
+
+type ListProductRequest struct {
+	Page     int32
+	PageSize int32
+}
+
+func (catalogHandler *catalogHandlerFunc) getListProduct(c echo.Context) error {
+	req := new(ListProductRequest)
+	req.Page = parseQueryIntParam(c, "page", 1, 1, 10)
+	req.PageSize = parseQueryIntParam(c, "page_size", 5, 5, 10)
+	arg := &catalog_service.ListProductRequest{
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	}
+
+	products, err := catalogHandler.catalogManagementOperator.GetListProduct(c.Request().Context(), arg)
+	if err != nil {
+		return Error(c, err, http.StatusBadRequest)
+	}
+
+	return Success(c, products, http.StatusOK, nil)
 }
