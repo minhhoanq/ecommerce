@@ -1,1 +1,5 @@
 # ecommerce
+
+## Diagram
+
+![](diagram.png)
