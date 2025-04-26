@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/database"
+	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/redis"
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/dataaccess/s3"
 	pb "github.com/minhhoanq/ecommerce/catalog_service/internal/generated/catalog_service"
 	"github.com/minhhoanq/ecommerce/catalog_service/internal/generated/user_service"
@@ -33,19 +35,23 @@ type catalogService struct {
 	catalogAccessor   database.CatalogDataAccessor
 	userServiceClient user_service.UserServiceClient
 	s3Client          s3.Client
+	redisCache        redis.RedisCache
 }
 
 func NewCatalogService(db *gorm.DB,
 	l logger.Interface,
 	catalogAccessor database.CatalogDataAccessor,
 	userServiceClient user_service.UserServiceClient,
-	s3Client s3.Client) CatalogService {
+	s3Client s3.Client,
+	redisCache redis.RedisCache,
+) CatalogService {
 	return &catalogService{
 		db:                db,
 		l:                 l,
 		catalogAccessor:   catalogAccessor,
 		userServiceClient: userServiceClient,
 		s3Client:          s3Client,
+		redisCache:        redisCache,
 	}
 }
 
@@ -175,26 +181,50 @@ func (c *catalogService) CreateProduct(ctx context.Context, arg *pb.CreateProduc
 		Product: response,
 	}, nil
 }
-
 func (c *catalogService) ListProduct(ctx context.Context, arg *pb.ListProductRequest) (*pb.ListProductResponse, error) {
-	fmt.Println(arg.GetPageSize())
-	products, err := c.catalogAccessor.ListProducts(ctx, &database.ListProductRequest{
-		Page:     arg.GetPage(),
-		PageSize: arg.GetPageSize(),
-	})
+	// 1. Build cache key
+	key := fmt.Sprintf("products:list:page:%d:size:%d", arg.GetPage(), arg.GetPageSize())
+
+	// 2. Try read cache
+	cacheData, err := c.redisCache.Get(ctx, key)
 	if err != nil {
-		return nil, err
+		c.l.Warn("redis get error, fallback to DB", zap.Error(err))
 	}
-	c.l.Info("len", zap.Int("len", len(products.Products)))
+
+	// products will hold DB result (or cached)
+	var products *database.ListProductResponse
+
+	if cacheData != "" {
+		// 3a. Cache hit: unmarshal vào struct đã khởi tạo
+		products = new(database.ListProductResponse)
+		if err := json.Unmarshal([]byte(cacheData), products); err != nil {
+			c.l.Warn("invalid cache data, fallback to DB", zap.Error(err))
+			products = nil
+		}
+	}
+
+	if products == nil {
+		// 3b. Cache miss: query DB
+		var errDB error
+		products, errDB = c.catalogAccessor.ListProducts(ctx, &database.ListProductRequest{
+			Page:     arg.GetPage(),
+			PageSize: arg.GetPageSize(),
+		})
+		if errDB != nil {
+			return nil, errDB
+		}
+		// 4. Set cache (async or ignore error)
+		b, _ := json.Marshal(products)
+		_ = c.redisCache.Set(ctx, key, string(b), 5*time.Minute)
+	}
+
+	// 5. Build gRPC response
 	response := make([]*pb.ProductWithSKUs, 0, len(products.Products))
-
-	for _, product := range products.Products {
-		response = append(response, convertProductResponse(&product))
+	for _, p := range products.Products {
+		response = append(response, convertProductResponse(&p))
 	}
 
-	return &pb.ListProductResponse{
-		Products: response,
-	}, nil
+	return &pb.ListProductResponse{Products: response}, nil
 }
 
 func (c *catalogService) CreateCart(ctx context.Context, arg *pb.CreateCartRequest) (*pb.CreateCartResponse, error) {
